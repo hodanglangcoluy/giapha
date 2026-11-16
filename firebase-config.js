@@ -14,5 +14,5 @@ window.FIREBASE_CONFIG = {
 /* Email của quản trị viên (ban biên soạn). Chỉ những email này, đã xác minh,
    mới thấy mục "Duyệt cập nhật". Danh sách này PHẢI giống danh sách trong firestore.rules. */
 window.ADMIN_EMAILS = [
-  "wellmat2023@gmail.com"
+  "wellmat2023@gmail.com","sanhnguyendang@gmail.com","drive.nttin@gmail.com"
 ];
