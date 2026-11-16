@@ -6,7 +6,7 @@ service cloud.firestore {
     function admin() {
       return request.auth != null
         && request.auth.token.email_verified == true
-        && request.auth.token.email.lower() in ['email-quan-tri-1@gmail.com'];
+        && request.auth.token.email.lower() in ['wellmat2023@gmail.com'];
     }
     function signedIn() { return request.auth != null; }
     function mine()     { return signedIn() && resource.data.uid == request.auth.uid; }
