@@ -170,6 +170,8 @@ a.btn{display:inline-flex;align-items:center}a.btn:hover{text-decoration:none}
 @media(max-width:640px){.cal .dc{min-height:58px}.pill{font-size:10px;padding:1px 3px}.cal .dn i{display:none}}
 .calbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}.calbar h2{margin:0;flex:1;min-width:140px}
 .rs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.rs span{background:var(--soft);border-radius:999px;padding:2px 10px;font-size:13px}
+.sprole{display:inline-block;margin-right:8px;padding:1px 8px;border-radius:999px;background:#f6ecd3;border:1px solid #e0cd9a;font-size:12.5px}.sprole b{color:#8c1c1c;font-weight:700;margin-right:2px}
+.rolebox{margin:0 0 12px;padding:8px 12px;border-left:4px solid #c9a23f;background:#fbf4de;border-radius:6px;font-size:14px;line-height:1.6}.rolebox b{color:#8c1c1c}
 .nvw{display:flex;align-items:center;gap:8px}.nvw nav{flex:1;min-width:0}.auth{display:flex;gap:8px;align-items:center;font-size:13px;white-space:nowrap;color:var(--muted)}
 .auth .who{max-width:170px;overflow:hidden;text-overflow:ellipsis}
 footer{border-top:1px solid var(--line);padding:16px 0 30px;color:var(--muted);font-size:12px}
@@ -353,7 +355,7 @@ function renderResults(){
   box.innerHTML=`<div class="muted small" style="margin-bottom:8px">${out.length} kết quả</div>
   <div class="card tablewrap" style="padding:6px 10px"><table class="list"><thead><tr><th>Họ và tên</th><th>Đời</th><th>Cha</th><th>Năm sinh</th><th>Hoàn thiện</th></tr></thead><tbody>
   ${sh.map(p=>{const f=p.f&&byid.get(p.f);const n=pct(p);
-   return `<tr><td>${link(p)}<div class="small muted">${p.r==='D'?(isF(p)?'Dâu':'Rể')+' · ':''}${esc(BR[p.br]||'')}</div></td><td>${p.d}</td>
+   return `<tr><td>${link(p)}<div class="small muted">${p.r==='D'?((()=>{const pa=byid.get(partnerOf.get(p.i));return pa?`${roleOf(p)} của ${link(pa)}`:(isF(p)?'Dâu':'Rể')})())+' · ':''}${esc(BR[p.br]||'')}</div></td><td>${p.d}</td>
    <td>${f?link(f):esc(clean(p.fn))}</td><td>${yearOf(p)||`<span class="muted small">khoảng ${estYear(p)}</span>`}</td>
    <td><div class="bar ${cls(n)==='low'?'low':''}" title="${n}%"><i style="width:${n}%"></i></div></td></tr>`}).join('')||'<tr><td colspan="5" class="muted">Không có kết quả phù hợp.</td></tr>'}
   </tbody></table></div>
@@ -377,6 +379,7 @@ function renderProfile(id,soft){
   v.innerHTML=`
   <p class="small"><a href="#tra-cuu">Tra cứu</a> · <a href="#pha-do">Phả đồ</a></p>
   <div class="ph"><button class="btn ghost" data-photo="1" style="padding:0;width:84px;height:84px;overflow:hidden;border-radius:12px" aria-label="Thêm hoặc đổi ảnh">${photoOf(p0.i)?`<img src="${photoOf(p0.i)}" alt="" style="width:100%;height:100%;object-fit:cover">`:'<span class="small">+ Thêm ảnh</span>'}</button><h2>${esc(clean(p0.n))}</h2>${/huý|húy/i.test(p0.n)?`<span class="small muted">(${esc(p0.n.replace(/^.*?(huý|húy)/i,"$1"))})</span>`:""}<span class="chip">Đời ${p0.d}</span>${p0.gi?`<span class="chip">Giòng ${esc(String(p0.gi).toLowerCase())}</span>`:''}<span class="chip">${p0.r==='D'?(isF(p0)?'Dâu':'Rể'):gender}</span><span class="chip">${esc(BR[p0.br]||'')}</span></div>
+  ${vtBlock(p0)}
   <div class="row" style="margin-bottom:14px"><div style="width:220px"><div class="small muted">Mức hoàn thiện hồ sơ ${n}%</div><div class="bar ${cls(n)==='low'?'low':''}"><i style="width:${n}%"></i></div></div>
    <button class="btn" data-add="">Gửi cập nhật cho hồ sơ này</button></div>
   <div class="grid2">
@@ -391,11 +394,11 @@ function renderProfile(id,soft){
       <div><span class="muted">Cha: </span>${father?link(father):esc(clean(p0.fn))||`<span class="need">${PH}</span>`}</div>
       <div><span class="muted">Mẹ: </span>${mother?link(mother):esc(clean(p0.mn))||`<span class="need">${PH}</span>`}</div>
       ${partner?`<div><span class="muted">${isF(p0)?'Vợ':'Chồng'} của: </span>${link(partner)}</div>`:''}
-      ${sp.length?`<div><span class="muted">${sp.length>1?'Vợ/chồng: ':'Vợ/chồng: '}</span>${sp.map(link).join(', ')}</div>`:''}
-      ${kids.length?`<div><span class="muted">Con (${kids.length}): </span>${kids.map(link).join(', ')}</div>`:(p0.r==='C'?'<div class="muted">Chưa có thông tin về con trong bảng.</div>':'')}
+      ${['Vợ','Chồng'].map(r=>{const L=sp.filter(q=>roleOf(q)===r);return L.length?`<div><span class="muted">${r}${L.length>1?' ('+L.length+')':''}: </span>${L.map(link).join(', ')}</div>`:''}).join('')}
+      ${kids.length?`<div><span class="muted">Con (${kids.length}): </span>${kids.map(k=>link(k)+' <span class="small muted">('+(isF(k)?'con gái':'con trai')+')</span>').join(', ')}</div>`:(p0.r==='C'?'<div class="muted">Chưa có thông tin về con trong bảng.</div>':'')}
     </div>
     <div class="row" style="margin-top:12px"><button class="btn ghost sm" data-rel="addchild">＋ Thêm con</button>${p0.r==='C'?'<button class="btn ghost sm" data-rel="addspouse">＋ Thêm vợ hoặc chồng</button>':''}${(p0.r==='C'&&(!father||!mother))?`<button class="btn ghost sm" data-rel="setparent">${!father&&!mother?'Gắn cha hoặc mẹ':!father?'Bổ sung cha':'Bổ sung mẹ'}</button>`:''}</div>
-    ${adm()?`<div class="row" style="margin-top:8px"><span class="small muted">Quản trị:</span><button class="btn sm" data-adm="edit">Sửa thông tin</button>${(p0.r==='C'&&(father||mother))?'<button class="btn ghost sm" data-rel="setparent">Đổi cha hoặc mẹ</button>':''}${father?'<button class="btn ghost sm" data-adm="rmf">Gỡ cha</button>':''}${mother?'<button class="btn ghost sm" data-adm="rmm">Gỡ mẹ</button>':''}${p0.added?'<button class="btn ghost sm" data-adm="del">Xoá người này</button>':''}</div>`:''}
+    ${adm()?`<div class="row" style="margin-top:8px"><span class="small muted">Quản trị:</span><button class="btn sm" data-adm="edit">Sửa thông tin</button><button class="btn ghost sm" data-adm="vt">Thêm vai trò</button>${(p0.r==='C'&&(father||mother))?'<button class="btn ghost sm" data-rel="setparent">Đổi cha hoặc mẹ</button>':''}${father?'<button class="btn ghost sm" data-adm="rmf">Gỡ cha</button>':''}${mother?'<button class="btn ghost sm" data-adm="rmm">Gỡ mẹ</button>':''}${p0.added?'<button class="btn ghost sm" data-adm="del">Xoá người này</button>':''}</div>`:''}
     ${pend.filter(r=>String(r.field).startsWith('@')).length?`<p class="small" style="margin:8px 0 0"><span class="pend">${pend.filter(r=>String(r.field).startsWith('@')).length} đề nghị về quan hệ đang chờ duyệt</span></p>`:''}</div>
     ${p0.dq?`<div class="card small"><h3>Lưu ý về dữ liệu</h3>${esc(p0.dq)}</div>`:''}
     <div class="card small muted">${p0.added?'Nguồn: do con cháu bổ sung và đã được ban biên soạn duyệt.':'Nguồn: gia phả phái 3 (bản 2008), bảng số '+p0.b+'.'} ${miss.length?`Còn ${miss.length} mục cần thu thập.`:'Hồ sơ đã đủ các mục theo dõi.'}</div>
@@ -416,12 +419,24 @@ function groupsForTree(){
   Object.keys(orph).sort().forEach(k=>{const [fn,d]=k.split('|');g.push({title:`Cành chưa nối: con của ${fn} (đời ${d})`,note:'Cha chưa có dòng riêng trong gia phả gốc',ids:orph[k]})});
   return g;
 }
+const roleOf=q=>isF(q)?'Vợ':'Chồng';
+/* Vai trò trong gia đình do ban quản trị ghi tay (lưu trong overrides, trường vt). Dữ liệu gốc không bị đổi. */
+const VT_ROLES=['Vợ','Chồng','Con dâu','Con rể','Con nuôi','Con riêng','Cháu nội','Cháu ngoại','Anh','Chị','Em','Khác'];
+const vtOf=id=>{const o=state.overrides[pid(id)];return Array.isArray(o&&o.vt)?o.vt:[]};
+function vtBlock(p){
+  const own=vtOf(p.i),rev=[];
+  Object.keys(state.overrides).forEach(k=>{const o=state.overrides[k];if(!o||!Array.isArray(o.vt))return;const src=byid.get(+k.slice(1));if(!src||src.i===p.i)return;
+    o.vt.forEach(e=>{if(e.w===p.i)rev.push(`${link(src)} là <b>${esc(String(e.r).toLowerCase())}</b> của người này${e.t?' <span class="small muted">('+esc(e.t)+')</span>':''}`)})});
+  if(!own.length&&!rev.length)return '';
+  const ad=adm();
+  const lines=own.map((e,i)=>{const w=e.w&&byid.get(e.w);return `<div><b>${esc(e.r)}</b> của ${w?link(w):esc(e.wn||'?')}${e.t?' <span class="small muted">('+esc(e.t)+')</span>':''}${ad?` <button class="btn ghost sm" data-adm="vtdel-${i}" style="padding:0 8px" aria-label="Xoá vai trò này">Xoá</button>`:''}</div>`}).concat(rev.map(x=>`<div>${x}</div>`));
+  return `<div class="rolebox"><div class="small muted" style="margin-bottom:2px">Vai trò trong gia đình</div>${lines.join('')}</div>`}
 function nodeHTML(id){
   const p=byid.get(id);const kids=kidsOf.get(id)||[];const n=pct(p);
-  const spn=(p.s||[]).map(x=>byid.get(x)).filter(Boolean).map(q=>`<a href="#ho-so-${q.i}">${esc(nm(q))}</a>`).join(', ');
+  const spn=(p.s||[]).map(x=>byid.get(x)).filter(Boolean).map(q=>`<span class="sprole"><b>${roleOf(q)}</b> <a href="#ho-so-${q.i}">${esc(nm(q))}</a></span>`).join(' ');
   return `<li data-id="${id}"><div class="node"><button class="tg ${kids.length?'':'empty'}" aria-label="Mở rộng" aria-expanded="false">+</button>
    <span class="gen">Đời ${p.d}</span>${link(p)}${p.gi?`<span class="chip">${esc(String(p.gi).toLowerCase())}</span>`:''}
-   <span class="small muted">${yearOf(p)?'sinh '+yearOf(p):''}${spn?` · ${isF(p)?'chồng':'vợ'}: `:''}</span>${spn?`<span class="small">${spn}</span>`:''}
+   <span class="small muted">${yearOf(p)?'sinh '+yearOf(p):''}</span>${spn?`<span class="small">${spn}</span>`:''}
    ${kids.length?`<span class="small muted">· ${kids.length} con</span>`:''}<span class="dot ${cls(n)}" title="Hoàn thiện ${n}%"></span></div></li>`;
 }
 function expand(li,deep){
@@ -629,8 +644,34 @@ async function admAct(kind,id){
     if(kind==='rmf'){await saveOv(P,{f:0,fn:''});refresh()}
     else if(kind==='rmm'){await saveOv(P,{m:0,mn:''});refresh()}
     else if(kind==='edit')adminEditDialog(P);
+    else if(kind==='vt')vtDialog(P);
+    else if(kind.startsWith('vtdel-')){const i=+kind.slice(6);await saveOv(P,{vt:vtOf(P.i).filter((e,k)=>k!==i)});refresh()}
     else if(kind==='del')delMemberDialog(P);
   }catch(e){alert_('Không ghi được vào kho chung. Hãy thử lại.')}}
+function vtDialog(P){
+  const d=$('#dlg');d.className='dlg wide';
+  d.innerHTML=`<h2 id="dtitle">Thêm vai trò cho ${esc(nm(P))}</h2>
+  <p class="meta">Ví dụ: <b>Con dâu</b> của Nguyễn Hữu Chẩn, hoặc <b>Vợ</b> của Nguyễn Trung Tín. Lưu là áp dụng ngay và hiện trên hồ sơ, đồng thời hiện ở hồ sơ của người được nhắc tới.</p>
+  <form id="vf" class="stack" novalidate>
+  <label class="f">${esc(nm(P))} là<select id="vr">${VT_ROLES.map(r=>`<option>${r}</option>`).join('')}</select></label>
+  <label class="f" id="vkw" hidden>Ghi vai trò<input type="text" id="vk" maxlength="40" placeholder="Ví dụ: Em họ"></label>
+  <label class="f">của (gõ ít nhất 2 chữ của tên để tìm)<input type="text" id="vq" autocomplete="off"></label>
+  <div id="vl" class="stack" style="margin-bottom:6px"></div>
+  <label class="f">Hoặc ghi tên nếu người đó chưa có trong phả hệ<input type="text" id="vn" maxlength="80"></label>
+  <label class="f">Ghi chú (không bắt buộc)<input type="text" id="vt" maxlength="120" placeholder="Ví dụ: lấy chồng năm 1990"></label>
+  <div class="err" id="ve" role="alert"></div>
+  <div class="row"><button class="btn" type="submit">Lưu vai trò</button><button class="btn ghost" type="button" id="vx">Đóng</button></div></form>`;
+  $('#ov').hidden=false;$('#vx').onclick=closeDialog;
+  $('#vr').onchange=()=>{$('#vkw').hidden=$('#vr').value!=='Khác'};
+  $('#vq').oninput=()=>{const q=fold($('#vq').value);
+    const hits=q.length<2?[]:DATA.filter(x=>x.i!==P.i&&fold(clean(x.n)).includes(q)).slice(0,10);
+    $('#vl').innerHTML=q.length<2?'':hits.length?hits.map(x=>`<label style="display:flex;gap:8px;align-items:center"><input type="radio" name="vw" value="${x.i}"> ${esc(nm(x))} <span class="small muted">đời ${x.d}${x.r==='D'?', '+(isF(x)?'dâu':'rể'):''}${x.y?', sinh '+x.y:''}</span></label>`).join(''):'<span class="small muted">Không thấy ai khớp.</span>'};
+  $('#vf').onsubmit=async e=>{e.preventDefault();const E=t=>{$('#ve').textContent=t};
+    let r=$('#vr').value;if(r==='Khác'){r=titleVN($('#vk').value);if(!r){E('Hãy ghi vai trò.');return}}
+    const w=document.querySelector('input[name=vw]:checked'),wn=titleVN($('#vn').value),t=$('#vt').value.trim();
+    if(!w&&!wn){E('Hãy chọn một người trong danh sách, hoặc ghi tên.');return}
+    const ent={r};if(w)ent.w=+w.value;else ent.wn=wn;if(t)ent.t=t;
+    try{await saveOv(P,{vt:vtOf(P.i).concat([ent])});closeDialog();refresh()}catch(err){E('Không ghi được vào kho chung. Hãy thử lại.')}}}
 function adminEditDialog(P){
   const d=$('#dlg');d.className='dlg wide';
   const cell=f=>{const v=val(P,f.k)||'';
@@ -779,7 +820,7 @@ function posterSVG(rootId,depth,showSp){
     s+=`<path d="M${x} ${y+CH}V${mid}M${X(n.ch[0])} ${mid}H${X(n.ch[n.ch.length-1])}${n.ch.map(c=>`M${X(c)} ${mid}V${Y(c)}`).join('')}" fill="none" stroke="url(#gold)" stroke-width="2.5" stroke-linecap="round"/>`});
   nodes.forEach(n=>{const p=byid.get(n.id),x=X(n)-CW/2,y=Y(n),ph=photoOf(p.i),fem=isF(p);
     const lines=wrapName(nm(p),15).slice(0,2);
-    const sp=(p.s||[]).map(q=>byid.get(q)).filter(Boolean).map(q=>nm(q));
+    const sq=(p.s||[]).map(q=>byid.get(q)).filter(Boolean),sp=sq.map(q=>nm(q));
     s+=`<g transform="translate(${x} ${y})">
      <rect width="${CW}" height="${CH}" rx="12" fill="#f7edd0" stroke="url(#gold)" stroke-width="3"/>
      <rect x="0" y="0" width="${CW}" height="8" rx="4" fill="${fem?'#c98282':'#16263a'}" opacity=".85"/>
@@ -791,7 +832,7 @@ function posterSVG(rootId,depth,showSp){
      </g>
      <g data-go="${p.i}" style="cursor:pointer">${lines.map((t,i)=>`<text x="${CW/2}" y="${118+i*14}" text-anchor="middle" font-size="12" font-weight="700" fill="#5b1212">${esc(t)}</text>`).join('')}
       <text x="${CW/2}" y="${lines.length>1?148:134}" text-anchor="middle" font-size="10.5" fill="#6b5a2e">${yearOf(p)?'sinh '+yearOf(p):''}</text>
-      ${showSp&&sp.length?`<text x="${CW/2}" y="${lines.length>1?161:149}" text-anchor="middle" font-size="9.5" fill="#6b5a2e">${fem?'chồng':'vợ'}: ${esc(trunc(sp[0],17))}${sp.length>1?' +'+(sp.length-1):''}</text>`:''}</g>
+      ${showSp&&sp.length?`<text x="${CW/2}" y="${lines.length>1?161:149}" text-anchor="middle" font-size="9.5" fill="#6b5a2e"><tspan font-weight="700" fill="#8c1c1c">${roleOf(sq[0])}:</tspan> ${esc(trunc(sp[0],16))}${sp.length>1?' +'+(sp.length-1):''}</text>`:''}</g>
      ${n.hid?`<g transform="translate(${CW/2} ${CH+18})"><rect x="-38" y="-12" width="76" height="24" rx="12" fill="#6e1414" stroke="#c9a23f" stroke-width="2"/><text y="4" text-anchor="middle" font-size="11" fill="#f3d98b" font-weight="600">+ ${n.hid} con</text></g>`:''}
     </g>`});
   return s+'</svg>';
