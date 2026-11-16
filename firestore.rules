@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Danh sách quản trị viên. Sửa email cho đúng, giống ADMIN_EMAILS trong firebase-config.js.
+    function admin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower() in ['email-quan-tri-1@gmail.com'];
+    }
+    function signedIn() { return request.auth != null; }
+    function mine()     { return signedIn() && resource.data.uid == request.auth.uid; }
+    function myNew()    { return signedIn() && request.resource.data.uid == request.auth.uid; }
+
+    // Thông tin do con cháu bổ sung đã được duyệt (có thể gồm điện thoại, địa chỉ):
+    // chỉ người đã đăng nhập mới xem; chỉ quản trị viên được ghi.
+    match /overrides/{id} {
+      allow read: if signedIn();
+      allow write: if admin();
+    }
+
+    // Người mới được duyệt thêm vào phả hệ (con, vợ, chồng): người đăng nhập xem; chỉ quản trị viên ghi.
+    match /newmembers/{id} {
+      allow read: if signedIn();
+      allow write: if admin();
+    }
+
+    // Yêu cầu cập nhật: ai đăng nhập cũng gửi được; chỉ quản trị viên và chính người gửi xem được;
+    // chỉ quản trị viên duyệt hoặc từ chối.
+    match /requests/{id} {
+      allow create: if myNew()
+        && request.resource.data.status == 'pending'
+        && request.resource.data.keys().hasOnly(['rid','pid','pidn','field','value','by','rel','contact','note','status','at','uid','person','target'])
+        && request.resource.data.value is string && request.resource.data.value.size() <= 2000
+        && (!('person' in request.resource.data) || request.resource.data.person is map);
+      allow read: if admin() || mine();
+      allow update, delete: if admin();
+    }
+
+    // Ảnh của từng người: chỉ người đăng nhập xem; chủ ảnh hoặc quản trị viên sửa, xoá.
+    match /photos/{id} {
+      allow read: if signedIn();
+      allow create: if myNew() && request.resource.data.d is string && request.resource.data.d.size() < 300000;
+      allow update: if ((mine() && myNew()) || admin()) && request.resource.data.d.size() < 300000;
+      allow delete: if mine() || admin();
+    }
+
+    // Ảnh tư liệu trên trang chủ: ai cũng xem; người đăng nhập thêm; chủ ảnh hoặc quản trị viên sửa, xoá.
+    match /gallery/{id} {
+      allow read: if true;
+      allow create: if myNew() && request.resource.data.d is string && request.resource.data.d.size() < 400000;
+      allow update: if ((mine() && myNew()) || admin()) && request.resource.data.d.size() < 400000;
+      allow delete: if mine() || admin();
+    }
+
+    // Blog
+    match /posts/{id} {
+      allow read: if true;
+      allow create: if myNew()
+        && request.resource.data.keys().hasOnly(['t','b','a','c','im','at','uid'])
+        && request.resource.data.t is string && request.resource.data.t.size() <= 200
+        && request.resource.data.b is string && request.resource.data.b.size() <= 8000
+        && request.resource.data.im.size() <= 4;
+      allow update: if admin();
+      allow delete: if mine() || admin();
+    }
+
+    // Lịch sự kiện
+    match /events/{id} {
+      allow read: if true;
+      allow create: if myNew()
+        && request.resource.data.keys().hasOnly(['t','k','tm','pl','nt','by','at','dt','ld','lm','uid'])
+        && request.resource.data.t is string && request.resource.data.t.size() <= 100;
+      allow update: if admin();
+      allow delete: if mine() || admin();
+    }
+
+    // Đăng ký tham dự
+    match /rsvps/{id} {
+      allow read: if true;
+      allow create: if myNew()
+        && request.resource.data.keys().hasOnly(['e','o','n','k','at','uid'])
+        && request.resource.data.n is string && request.resource.data.n.size() <= 80;
+      allow update: if false;
+      allow delete: if mine() || admin();
+    }
+  }
+}
