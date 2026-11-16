@@ -998,6 +998,22 @@ function gateView(){
   if(!state.baseReady){v.innerHTML=box('Đang tải gia phả…','');return true}
   if(!DATA.length&&h!=='duyet'){v.innerHTML=box('Chưa có dữ liệu gia phả',state.isAdmin?'<p>Hãy vào mục <a href="#duyet">Duyệt cập nhật</a> và nạp tệp <b>members.json</b> (dữ liệu gốc) lên một lần.</p>':'<p>Ban biên soạn chưa nạp dữ liệu. Hãy quay lại sau.</p>');return true}
   return false}
+function dlFile(name,mime,text){const b=new Blob([text],{type:mime});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}
+const todayStr=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+function exportCsv(){
+  const H=['Mã số','Họ và tên','Đời','Nhánh','Loại','Giới tính','Cha','Mẹ','Vợ hoặc chồng','Năm sinh','Ngày sinh (dương lịch)','Ngày sinh (âm lịch)','Nơi sinh','Tình trạng','Ngày mất (dương lịch)','Ngày mất (âm lịch)','Ngày giỗ (âm lịch)','Nơi an táng','Nghề nghiệp, nơi ở, ghi chú','Địa chỉ hiện tại','Điện thoại','Email','Trang Facebook','Tiểu sử','Vai trò ghi tay','Nguồn'];
+  const q=v=>{v=v==null?'':String(v);return /[",\n\r;]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  const rows=DATA.map(p=>{const f=p.f&&byid.get(p.f),m=p.m&&byid.get(p.m);
+    const sp=(p.s||[]).map(x=>byid.get(x)).filter(Boolean).map(x=>roleOf(x)+': '+clean(x.n)).join('; ');
+    const vt=vtOf(p.i).map(e=>{const w=e.w&&byid.get(e.w);return e.r+' của '+(w?clean(w.n):(e.wn||''))+(e.t?' ('+e.t+')':'')}).join('; ');
+    return [p.i,clean(p.n),p.d,BR[p.br]||'',p.r==='D'?(isF(p)?'Dâu':'Rể'):'Con cháu trong họ',val(p,'gt'),f?clean(f.n):clean(p.fn),m?clean(m.n):clean(p.mn),sp,p.y||'',val(p,'sd'),val(p,'sa'),val(p,'bp'),val(p,'tt'),val(p,'md'),val(p,'ma'),val(p,'gio'),val(p,'at'),val(p,'nt'),val(p,'addr'),val(p,'ph'),val(p,'em'),val(p,'fb'),val(p,'bio'),vt,p.added?'Con cháu bổ sung':'Gia phả 2008'].map(q).join(',')});
+  dlFile('gia-pha-ho-dang-'+todayStr()+'.csv','text/csv;charset=utf-8','﻿'+[H.map(q).join(',')].concat(rows).join('\r\n'))}
+function exportJson(withPhotos){
+  const strip=(k,v)=>k==='_o'?undefined:v;
+  const out={xuatLuc:new Date().toISOString(),ghiChu:'Sao lưu gia phả họ Đặng. members là danh sách đã gồm mọi chỉnh sửa; baseMembers là dữ liệu gốc; overrides, newMembers là phần được duyệt thêm.',
+    members:DATA,overrides:state.overrides,newMembers:state.extra,posts:state.posts||[],events:state.events||[],rsvps:state.rsvps||[],requests:state.requests||[],users:state.users||[]};
+  if(withPhotos){out.photos={persons:state.ph,gallery:state.gal}}
+  dlFile('gia-pha-sao-luu-'+todayStr()+'.json','application/json;charset=utf-8',JSON.stringify(out,strip,1))}
 function adminPanels(){
   const v=$('#view');const us=state.users||[];
   const pend=us.filter(u=>u.status==='pending').sort((a,b)=>a.at-b.at),ok=us.filter(u=>u.status==='approved'),no=us.filter(u=>u.status==='rejected');
@@ -1011,8 +1027,13 @@ function adminPanels(){
     ${no.length?`<h3 style="margin-top:16px">Đã từ chối hoặc thu hồi (${no.length})</h3>`+no.map(u=>row(u,`<button class="btn ghost sm" data-ua="${esc(u.id)}">Cho phép lại</button>`)).join(''):''}</div>
   <div class="card"><h3>Dữ liệu gốc của gia phả</h3>
     <p class="small">Hiện có <b>${BASE_N}</b> thành viên trong dữ liệu gốc. Dữ liệu này nằm trong Firebase, không nằm trong mã nguồn công khai trên GitHub. Chọn tệp <b>members.json</b> để nạp lần đầu hoặc nạp lại.</p>
-    <p><input type="file" id="bfile" accept=".json,application/json"></p><div class="small" id="bmsg" role="status"></div></div>`;
+    <p><input type="file" id="bfile" accept=".json,application/json"></p><div class="small" id="bmsg" role="status"></div></div>
+  <div class="card"><h3>Tải dữ liệu về máy tính</h3>
+    <p class="small">Dữ liệu hiện tại gồm mọi chỉnh sửa và người mới đã duyệt. Nên tải sao lưu định kỳ.</p>
+    <div class="row"><button class="btn" id="exc">Tải bảng gia phả (.csv, mở bằng Excel)</button><button class="btn ghost" id="exj">Tải sao lưu đầy đủ (.json)</button></div>
+    <label class="small" style="display:block;margin-top:8px"><input type="checkbox" id="exp"> Sao lưu đầy đủ kèm ảnh (tệp sẽ nặng hơn)</label></div>`;
   v.appendChild(d);
+  $('#exc').onclick=exportCsv;$('#exj').onclick=()=>exportJson($('#exp').checked);
   d.querySelectorAll('[data-ua]').forEach(b=>b.onclick=()=>DB.doc('users/'+b.dataset.ua).update({status:'approved'}).catch(()=>alert_('Không cập nhật được tài khoản này.')));
   d.querySelectorAll('[data-ur]').forEach(b=>b.onclick=()=>DB.doc('users/'+b.dataset.ur).update({status:'rejected'}).catch(()=>alert_('Không cập nhật được tài khoản này.')));
   $('#bfile').onchange=async e=>{const f=e.target.files[0];if(!f)return;const m=$('#bmsg');
