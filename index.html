@@ -120,6 +120,11 @@ ul.tree li{margin:2px 0}
 .gslot{border:2px dashed var(--line);border-radius:12px;background:var(--surface);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;cursor:pointer;overflow:hidden;position:relative;padding:0;color:var(--muted);font:inherit}
 .gslot:hover{border-color:#c9a24a}.gslot img{width:100%;height:100%;object-fit:cover;display:block}
 .gcap{font-size:13px;margin-top:6px;text-align:center}
+.nkind{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;background:#efe6d2;color:#5b1212}
+.nkind.fund{background:#5b1212;color:#ffe9a8}
+.bar{height:12px;border-radius:99px;background:#e7e2d6;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,#a32a2a,#d9a441)}
+.fundbox{border:1px solid #d9c48c;background:#fffaf0;border-radius:12px;padding:14px;margin:12px 0}
+.fundbox dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:8px 0 0}.fundbox dt{color:var(--muted)}.fundbox dd{margin:0;font-weight:600;word-break:break-word}
 .pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 .pcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;color:inherit}
 .pcard:hover{text-decoration:none;border-color:#c9a24a}
@@ -138,11 +143,26 @@ label.f{display:grid;gap:4px;font-size:13px;color:var(--muted);margin-bottom:10p
 
 /* header ảnh + trang chủ + lịch */
 header.mast{position:static}
-.hd{background:linear-gradient(90deg,rgba(80,14,14,.93),rgba(80,14,14,.6) 55%,rgba(80,14,14,.1)),url(img/banner.jpg) center/cover #5b1212;color:#fff;padding:30px 0 26px;min-height:150px;display:flex;align-items:center}
+.hd{background:linear-gradient(90deg,rgba(70,12,12,.92),rgba(70,12,12,.78) 34%,rgba(70,12,12,.3) 56%,rgba(70,12,12,0) 72%),url(img/banner.jpg) right center/cover #5b1212;color:#fff;padding:30px 0 26px;min-height:150px;display:flex;align-items:center}
 .hd .wrap{width:100%}.hd h1{font:700 34px/1.15 var(--font-display);color:#ffe9a8;margin:2px 0 6px;text-shadow:0 1px 8px rgba(0,0,0,.4)}
 .hd-k{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#f6dfb0}.hd .sub{color:#f3e2bd;font-size:13px;max-width:60ch}
 .navbar{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-@media(max-width:560px){.hd h1{font-size:26px}.hd{padding:20px 0 18px;min-height:120px}}
+@media(max-width:560px){.hd h1{font-size:26px}.hd{padding:20px 0 18px;min-height:130px;background:linear-gradient(90deg,rgba(70,12,12,.9),rgba(70,12,12,.62)),url(img/banner.jpg) 70% center/cover #5b1212}.hd .sub{font-size:12.5px}}
+/* menu gọn trên màn hình nhỏ */
+.navtog{display:none}
+@media(max-width:760px){
+  .navbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:6px;padding-bottom:6px}
+  .navtog{display:inline-flex;align-items:center;gap:10px;min-height:44px;max-width:calc(100% - 96px);padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-weight:600;font-size:16px;line-height:1.2;font-family:inherit;color:var(--ink);cursor:pointer;text-align:left}
+  .navtog:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .navtog .bars{flex:none;width:20px;height:14px;background:linear-gradient(var(--accent),var(--accent)) 0 0/100% 2px no-repeat,linear-gradient(var(--accent),var(--accent)) 0 6px/100% 2px no-repeat,linear-gradient(var(--accent),var(--accent)) 0 12px/100% 2px no-repeat}
+  .navtog .cur{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .navtog .car{flex:none;margin-left:2px;font-size:12px;color:var(--muted)}
+  nav.tabs{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;overflow:visible;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 14px 24px rgba(0,0,0,.18);z-index:30;max-height:75vh;overflow-y:auto}
+  nav.tabs.open{display:flex}
+  nav.tabs a{padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);border-left:5px solid transparent;color:var(--ink);white-space:normal}
+  nav.tabs a[aria-current="page"]{border-bottom:1px solid var(--line);border-left-color:var(--accent);background:var(--soft);color:var(--accent);font-weight:700}
+  .auth .who{display:none}
+}
 .hero2{position:relative;border-radius:14px;overflow:hidden;min-height:360px;background:#2a1010 url(img/cong-lang-cu.jpg) center 60%/cover;color:#fff;display:flex;align-items:flex-end;margin-bottom:16px}
 .hero2::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(60,10,10,.92) 0%,rgba(60,10,10,.55) 45%,rgba(60,10,10,.05) 100%)}
 .hero2 .in{position:relative;padding:28px;max-width:760px}.hero2 h2{font:700 30px/1.2 var(--font-display);color:#ffe9a8;margin:0 0 8px}
@@ -183,14 +203,14 @@ footer{border-top:1px solid var(--line);padding:16px 0 30px;color:var(--muted);f
 <header class="mast">
   <div class="hd"><div class="wrap"><div class="hd-k">Họ Nguyễn Đặng · làng Cổ Lũy</div><h1>Gia phả họ Đặng</h1><div class="sub">Phái 3 · làng Cổ Lũy, xã Hải Ba, huyện Hải Lăng, Quảng Trị · bản gốc hoàn thành 06/11/2008</div></div></div>
   <div class="navbar"><div class="wrap nvw">
+    <button type="button" class="navtog" id="navtog" aria-expanded="false" aria-controls="tabs"><span class="bars" aria-hidden="true"></span><span class="cur" id="navcur">Menu</span><span class="car" aria-hidden="true">▾</span></button>
     <nav class="tabs" id="tabs" aria-label="Các mục">
       <a href="#trang-chu" data-t="trang-chu">Trang chủ</a>
       <a href="#lich" data-t="lich">Lịch sự kiện</a>
       <a href="#tra-cuu" data-t="tra-cuu">Tra cứu</a>
-      <a href="#pha-do" data-t="pha-do">Phả đồ</a>
       <a href="#pha-do-tranh" data-t="pha-do-tranh">Phả đồ treo tường</a>
+      <a href="#tin-tuc" data-t="tin-tuc">Tin tức họ</a>
       <a href="#blog" data-t="blog">Blog dòng họ</a>
-      <a href="#thong-ke" data-t="thong-ke">Thông tin cần bổ sung</a>
       <a href="#duyet" data-t="duyet" id="tabduyet">Duyệt cập nhật <span class="chip" id="pcount" hidden></span></a>
     </nav>
     <div class="auth" id="auth"></div>
@@ -286,18 +306,27 @@ buildIndex();
 function dateLine(p,s,a){const x=val(p,s),y=val(p,a);return [x,y&&'ÂL '+y].filter(Boolean).join(' · ')}
 
 /* ---------- views ---------- */
-function setTab(t){document.querySelectorAll('#tabs a').forEach(a=>{if(a.dataset.t===t)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
+function setTab(t){let cur='';document.querySelectorAll('#tabs a').forEach(a=>{if(a.dataset.t===t){a.setAttribute('aria-current','page');cur=(a.childNodes[0].textContent||'').trim()}else a.removeAttribute('aria-current')});
+  const c=$('#navcur');if(c)c.textContent=cur||'Menu'}
+(function(){const tg=$('#navtog'),nv=$('#tabs');if(!tg||!nv)return;
+  const set=o=>{nv.classList.toggle('open',o);tg.setAttribute('aria-expanded',o?'true':'false')};
+  tg.addEventListener('click',e=>{e.stopPropagation();set(!nv.classList.contains('open'))});
+  nv.addEventListener('click',e=>{if(e.target.closest('a'))set(false)});
+  document.addEventListener('click',e=>{if(!e.target.closest('.navbar'))set(false)});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nv.classList.contains('open')){set(false);tg.focus()}});
+  window.addEventListener('hashchange',()=>set(false));
+  window.addEventListener('resize',()=>{if(innerWidth>760)set(false)})})();
 function route(){
   if(gateView())return;
   const h=(location.hash||'#trang-chu').slice(1);
   window.scrollTo(0,0);
   if(h.startsWith('ho-so-')){setTab('');renderProfile(+h.slice(6));}
-  else if(h==='pha-do'){setTab('pha-do');renderTree();}
   else if(h==='pha-do-tranh'){setTab('pha-do-tranh');renderPoster();}
   else if(h==='lich'){setTab('lich');renderCal();}
   else if(h==='blog'){setTab('blog');renderBlog();}
   else if(h.startsWith('bai-viet-')){setTab('blog');renderPost(h.slice(9));}
-  else if(h==='thong-ke'){setTab('thong-ke');renderStats();}
+  else if(h==='tin-tuc'){setTab('tin-tuc');renderNews();}
+  else if(h.startsWith('tin-tuc-')){setTab('tin-tuc');renderNewsItem(h.slice(8));}
   else if(h==='duyet'){setTab('duyet');renderAdmin();}
   else if(h==='tra-cuu'){setTab('tra-cuu');renderSearch();}
   else{setTab('trang-chu');renderHome();}
@@ -309,7 +338,7 @@ function refresh(){
   const h=(location.hash||'#trang-chu').slice(1);
   if(h==='duyet')renderAdmin();else if(h.startsWith('ho-so-'))renderProfile(+h.slice(6),true);
   else if(h==='lich')renderCal();else if(h==='blog')renderBlog();else if(h.startsWith('bai-viet-'))renderPost(h.slice(9));
-  else if(h==='thong-ke')renderStats();else if(h==='pha-do-tranh')paintPoster();else if(h==='tra-cuu')renderResults();else if(h==='trang-chu'||h==='lich-su'||h==='')renderHome();
+  else if(h==='tin-tuc')renderNews();else if(h.startsWith('tin-tuc-'))renderNewsItem(h.slice(8));else if(h==='pha-do-tranh')paintPoster();else if(h==='tra-cuu')renderResults();else if(h==='trang-chu'||h==='lich-su'||h==='')renderHome();
   modeBanner();
 }
 function modeBanner(){
@@ -379,7 +408,7 @@ function renderProfile(id,soft){
   const row=(k,content)=>{const has=content;const pn=pend.filter(r=>r.field===k).length;
     return `<dt>${FL[k].l}</dt><dd>${has?(k==='fb'?fbLink(content):esc(content)):`<span class="need">${PH} <button data-add="${k}">Bổ sung</button></span>`}${pn?` <span class="pend">${pn} yêu cầu đang chờ duyệt</span>`:''}</dd>`};
   v.innerHTML=`
-  <p class="small"><a href="#tra-cuu">Tra cứu</a> · <a href="#pha-do">Phả đồ</a></p>
+  <p class="small"><a href="#tra-cuu">Tra cứu</a> · <a href="#pha-do-tranh">Phả đồ treo tường</a></p>
   <div class="ph"><button class="btn ghost" data-photo="1" style="padding:0;width:84px;height:84px;overflow:hidden;border-radius:12px" aria-label="Thêm hoặc đổi ảnh">${photoOf(p0.i)?`<img src="${photoOf(p0.i)}" alt="" style="width:100%;height:100%;object-fit:cover">`:'<span class="small">+ Thêm ảnh</span>'}</button><h2>${esc(clean(p0.n))}</h2>${/huý|húy/i.test(p0.n)?`<span class="small muted">(${esc(p0.n.replace(/^.*?(huý|húy)/i,"$1"))})</span>`:""}<span class="chip">Đời ${p0.d}</span>${p0.gi?`<span class="chip">Giòng ${esc(String(p0.gi).toLowerCase())}</span>`:''}<span class="chip">${p0.r==='D'?(isF(p0)?'Dâu':'Rể'):gender}</span><span class="chip">${esc(BR[p0.br]||'')}</span></div>
   ${vtBlock(p0)}
   <div class="row" style="margin-bottom:14px"><div style="width:220px"><div class="small muted">Mức hoàn thiện hồ sơ ${n}%</div><div class="bar ${cls(n)==='low'?'low':''}"><i style="width:${n}%"></i></div></div>
@@ -990,8 +1019,8 @@ function loginDialog(msg){
 
 /* ---- trang riêng tư: màn hình chờ, nạp dữ liệu gốc, quản lý tài khoản ---- */
 function setBase(arr){DATA.length=0;arr.forEach(p=>DATA.push(p));BASE_N=DATA.length;Object.keys(BASE_REL).forEach(k=>delete BASE_REL[k]);DATA.forEach(p=>{BASE_REL[p.i]={f:p.f,m:p.m,s:(p.s||[]).slice()}})}
-const PUB_TABS=['trang-chu','lich','blog'];
-function isPub(h){return h===''||h==='lich-su'||PUB_TABS.includes(h)||h.startsWith('bai-viet-')}
+const PUB_TABS=['trang-chu','lich','blog','tin-tuc'];
+function isPub(h){return h===''||h==='lich-su'||PUB_TABS.includes(h)||h.startsWith('bai-viet-')||h.startsWith('tin-tuc-')}
 function gateView(){
   const v=$('#view'),tabs=$('#tabs'),h=(location.hash||'#trang-chu').slice(1);
   if(state.mode!=='db'){tabs.hidden=true;v.innerHTML=`<div class="card" style="max-width:560px;margin:24px auto;text-align:center"><h2 style="margin-top:0">${state.why?'Chưa kết nối được Firebase':'Đang tải…'}</h2>${state.why?'<p>'+esc(state.why)+'</p>':''}</div>`;return true}
@@ -1022,7 +1051,7 @@ function exportCsv(){
 function exportJson(withPhotos){
   const strip=(k,v)=>k==='_o'?undefined:v;
   const out={xuatLuc:new Date().toISOString(),ghiChu:'Sao lưu gia phả họ Đặng. members là danh sách đã gồm mọi chỉnh sửa; baseMembers là dữ liệu gốc; overrides, newMembers là phần được duyệt thêm.',
-    members:DATA,overrides:state.overrides,newMembers:state.extra,posts:state.posts||[],events:state.events||[],rsvps:state.rsvps||[],requests:state.requests||[],users:state.users||[]};
+    members:DATA,overrides:state.overrides,newMembers:state.extra,posts:state.posts||[],news:state.news||[],events:state.events||[],rsvps:state.rsvps||[],requests:state.requests||[],users:state.users||[]};
   if(withPhotos){out.photos={persons:state.ph,gallery:state.gal}}
   dlFile('gia-pha-sao-luu-'+todayStr()+'.json','application/json;charset=utf-8',JSON.stringify(out,strip,1))}
 function adminPanels(){
@@ -1084,6 +1113,7 @@ async function initDb(){
       if(state.isAdmin)add(sub(col('users'),L=>{state.users=L.map(x=>Object.assign({id:x.id},x.v));refresh()}))};
     /* công khai: blog, lịch sự kiện, đăng ký tham dự, ảnh tư liệu (không cần đăng nhập) */
     sub(col('posts'),L=>{state.posts=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
+    sub(col('news'),L=>{state.news=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
     sub(col('events'),L=>{state.events=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
     sub(col('rsvps'),L=>{state.rsvps=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
     sub(col('gallery'),L=>{state.gal={};state.galUid={};L.forEach(x=>{if(x.v&&x.v.d){state.gal[x.id]=x.v.d;state.galUid[x.id]=x.v.uid}});mergePhotos();refresh()});
@@ -1145,7 +1175,7 @@ function gDialog(id,label){gTarget=id;const cur=state.photos[id];if(!cur){if(nee
   $('#gd').onclick=async()=>{delete state.photos[id];refresh();closeDialog();if(DB){try{await DB.doc('gallery/'+id).delete()}catch(e){}}}}
 
 /* ---------- blog dòng họ ---------- */
-state.posts=[];state.localPosts=[];
+state.posts=[];state.localPosts=[];state.news=[];state.localNews=[];
 const CATS=['Kỷ niệm gia đình','Nhớ về tổ tiên','Giỗ chạp, lễ họ','Quê hương Cổ Lũy','Tin họ tộc','Khác'];
 const SEED=[
  {id:'s1',t:'Vì sao có hai ngày giỗ lớn trong họ',a:'Từ gia phả phái 3',c:'Giỗ chạp, lễ họ',at:Date.UTC(2008,10,6),seed:1,
@@ -1207,6 +1237,80 @@ function postDialog(){if(needLogin())return;
     closeDialog();
     if(location.hash==='#bai-viet-'+id)route();else location.hash='#bai-viet-'+id;
     if(warn)alert_('Bài viết hiện chỉ lưu trong tab này vì tài khoản chưa có quyền đóng góp.');
+  };
+}
+
+/* ---------- Tin tức họ: quản trị viên đăng tin, kêu gọi đóng quỹ ---------- */
+const NKINDS=['Thông báo','Tin họ tộc','Kêu gọi đóng quỹ'];
+function allNews(){return state.news.concat(state.localNews).sort((a,b)=>(b.at||0)-(a.at||0))}
+function vnd(n){return (Number(n)||0).toLocaleString('vi-VN')+' đ'}
+function fundHtml(p){
+  if(p.k!=='Kêu gọi đóng quỹ')return'';
+  const g=+p.goal||0,c=+p.got||0,pc=g?Math.min(100,Math.round(c*100/g)):0;
+  return `<div class="fundbox"><b>Quỹ: ${esc(p.t)}</b>
+   ${g?`<div class="bar" role="progressbar" aria-valuenow="${pc}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pc}%"></i></div><div class="small">Đã nhận <b>${vnd(c)}</b> / mục tiêu <b>${vnd(g)}</b> (${pc}%)</div>`:(c?`<div class="small">Đã nhận <b>${vnd(c)}</b></div>`:'')}
+   <dl>${p.dl?`<dt>Hạn đóng góp</dt><dd>${esc(p.dl)}</dd>`:''}${p.bk?`<dt>Ngân hàng</dt><dd>${esc(p.bk)}</dd>`:''}${p.ac?`<dt>Số tài khoản</dt><dd>${esc(p.ac)}</dd>`:''}${p.an?`<dt>Chủ tài khoản</dt><dd>${esc(p.an)}</dd>`:''}${p.nt?`<dt>Nội dung chuyển</dt><dd>${esc(p.nt)}</dd>`:''}${p.ct?`<dt>Liên hệ</dt><dd>${esc(p.ct)}</dd>`:''}</dl></div>`}
+function renderNews(){
+  const list=allNews();
+  $('#view').innerHTML=`<section class="hero"><h2>Tin tức họ Nguyễn Đặng</h2><p>Thông báo của ban quản trị, tin họ tộc và các đợt kêu gọi đóng quỹ.</p>${adm()?'<p style="margin-top:12px"><button class="btn" id="newnews" style="background:#ffe9a8;color:#5b1212">Đăng tin mới</button></p>':''}</section>
+  ${list.length?`<div class="pcards">${list.map(p=>`<a class="pcard" href="#tin-tuc-${esc(p.id)}"><div class="cv">${p.im&&p.im[0]?`<img src="${p.im[0]}" alt="">`:(p.k==='Kêu gọi đóng quỹ'?'❀':'✎')}</div><div class="bd"><span class="nkind${p.k==='Kêu gọi đóng quỹ'?' fund':''}" style="justify-self:start">${esc(p.k||'Thông báo')}</span><h3>${esc(p.t)}</h3><p class="small">${esc(excerpt(p.b))}</p><div class="meta">${fdate(p.at)}</div></div></a>`).join('')}</div>`:'<p class="small">Chưa có tin nào.</p>'}`;
+  const b=$('#newnews');if(b)b.onclick=()=>newsDialog();
+}
+function renderNewsItem(id){
+  const p=allNews().find(x=>x.id===id);
+  if(!p){$('#view').innerHTML='<p>Không tìm thấy tin. <a href="#tin-tuc">Về trang Tin tức</a></p>';return}
+  const paras=String(p.b||'').split(/\n\s*\n/).map(x=>`<p>${esc(x).replace(/\n/g,'<br>')}</p>`).join('');
+  $('#view').innerHTML=`<p><a href="#tin-tuc">← Tất cả tin</a></p><article class="post"><span class="nkind${p.k==='Kêu gọi đóng quỹ'?' fund':''}">${esc(p.k||'Thông báo')}</span><h2>${esc(p.t)}</h2><div class="meta" style="margin-bottom:14px">${esc(p.a||'Ban quản trị')} · ${fdate(p.at)}</div>
+   ${fundHtml(p)}
+   ${(p.im&&p.im.length)?`<div class="pimgs">${p.im.map((d,i)=>`<img src="${d}" alt="Ảnh ${i+1}" data-zoom="${i}">`).join('')}</div>`:''}
+   ${paras}${adm()?'<p><button class="btn ghost sm" id="ednews">Sửa tin</button> <button class="btn ghost sm" id="delnews">Xoá tin</button></p>':''}</article>`;
+  $('#view').querySelectorAll('[data-zoom]').forEach(im=>im.onclick=()=>{$('#dlg').innerHTML=`<p><img src="${im.src}" alt="" style="max-width:100%;border-radius:10px"></p><p><button class="btn" id="zq">Đóng</button></p>`;$('#ov').hidden=false;$('#zq').onclick=closeDialog});
+  const e=$('#ednews');if(e)e.onclick=()=>newsDialog(p);
+  const d=$('#delnews');if(d)d.onclick=()=>{$('#dlg').innerHTML=`<h2 id="dtitle">Xoá tin này?</h2><p>Tin sẽ biến mất với mọi người.</p><div class="row"><button class="btn" id="dy">Xoá</button><button class="btn ghost" id="dn">Không xoá</button></div>`;$('#ov').hidden=false;$('#dn').onclick=closeDialog;
+    $('#dy').onclick=async()=>{closeDialog();state.localNews=state.localNews.filter(x=>x.id!==id);state.news=state.news.filter(x=>x.id!==id);if(DB){try{await DB.doc('news/'+id).delete()}catch(er){alert_('Không xoá được: tài khoản này chưa có quyền quản trị.')}}location.hash='#tin-tuc'}};
+}
+function newsDialog(old){
+  let imgs=old&&old.im?old.im.slice():[];const o0=old||{};
+  $('#dlg').className='dlg wide';
+  $('#dlg').innerHTML=`<h2 id="dtitle">${old?'Sửa tin':'Đăng tin mới'}</h2>
+  <label class="f">Loại tin<select id="nk">${NKINDS.map(c=>`<option${c===(o0.k||'Thông báo')?' selected':''}>${esc(c)}</option>`).join('')}</select></label>
+  <label class="f">Tiêu đề<input type="text" id="nt" maxlength="120" value="${esc(o0.t||'')}"></label>
+  <label class="f">Nội dung (để trống một dòng giữa các đoạn)<textarea id="nb" rows="8" maxlength="8000">${esc(o0.b||'')}</textarea></label>
+  <div id="fundf" style="display:none">
+   <label class="f">Mục tiêu (số tiền, đồng)<input type="text" inputmode="numeric" id="ng" value="${esc(o0.goal||'')}"></label>
+   <label class="f">Đã nhận được (đồng, cập nhật khi có thêm)<input type="text" inputmode="numeric" id="ngt" value="${esc(o0.got||'')}"></label>
+   <label class="f">Hạn đóng góp<input type="text" id="ndl" maxlength="60" value="${esc(o0.dl||'')}" placeholder="ví dụ 30/12/2026"></label>
+   <label class="f">Ngân hàng<input type="text" id="nbk" maxlength="60" value="${esc(o0.bk||'')}"></label>
+   <label class="f">Số tài khoản<input type="text" id="nac" maxlength="40" value="${esc(o0.ac||'')}"></label>
+   <label class="f">Chủ tài khoản<input type="text" id="nan" maxlength="60" value="${esc(o0.an||'')}"></label>
+   <label class="f">Nội dung chuyển khoản<input type="text" id="nnt" maxlength="80" value="${esc(o0.nt||'')}" placeholder="ví dụ Ho ten - doi - Quy ho Nguyen Dang"></label>
+   <label class="f">Người liên hệ<input type="text" id="nct" maxlength="80" value="${esc(o0.ct||'')}" placeholder="tên và số điện thoại"></label>
+   <p class="small">Số tài khoản hiện công khai với mọi người mở trang này.</p></div>
+  <div class="f" style="display:grid;gap:6px;font-size:13px;color:var(--muted);margin-bottom:10px">Hình ảnh (tối đa 3 ảnh)<div class="thumbs" id="th"></div><div><button class="btn ghost sm" id="pi" type="button">＋ Thêm ảnh</button></div></div>
+  <div class="err" id="pe" role="alert"></div>
+  <div class="row"><button class="btn" id="ps">${old?'Lưu':'Đăng tin'}</button><button class="btn ghost" id="px">Huỷ</button></div>`;
+  $('#ov').hidden=false;
+  const sync=()=>{$('#fundf').style.display=$('#nk').value==='Kêu gọi đóng quỹ'?'block':'none'};$('#nk').onchange=sync;sync();
+  const th=()=>{$('#th').innerHTML=imgs.map((d,i)=>`<div><img src="${d}" alt=""><button type="button" data-rm="${i}" aria-label="Bỏ ảnh">×</button></div>`).join('');
+    $('#th').querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{imgs.splice(+b.dataset.rm,1);th()});$('#pi').disabled=imgs.length>=3};th();
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;
+  inp.onchange=async()=>{for(const f of [...inp.files]){if(imgs.length>=3)break;try{imgs.push(await shrinkW(f,900,0.72))}catch(e){$('#pe').textContent='Có ảnh không đọc được, hãy dùng tệp JPG hoặc PNG.'}}th()};
+  $('#pi').onclick=()=>inp.click();
+  $('#px').onclick=()=>{$('#dlg').className='dlg';closeDialog()};
+  const num=v=>String(v||'').replace(/[^\d]/g,'');
+  $('#ps').onclick=async()=>{
+    const t=$('#nt').value.trim(),b=$('#nb').value.trim(),k=$('#nk').value;
+    if(!t||!b){$('#pe').textContent='Cần có tiêu đề và nội dung.';return}
+    if(imgs.join('').length>800000){$('#pe').textContent='Ảnh quá nặng, hãy bỏ bớt một ảnh.';return}
+    const o={t,b,k,a:o0.a||'Ban quản trị',im:imgs,at:o0.at||Date.now()};
+    if(k==='Kêu gọi đóng quỹ'){Object.assign(o,{goal:num($('#ng').value),got:num($('#ngt').value),dl:$('#ndl').value.trim(),bk:$('#nbk').value.trim(),ac:$('#nac').value.trim(),an:$('#nan').value.trim(),nt:$('#nnt').value.trim(),ct:$('#nct').value.trim()})}
+    const id=old?old.id:'n'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    $('#ps').disabled=true;
+    if(DB){try{await DB.doc('news/'+id).set(o)}catch(e){$('#ps').disabled=false;$('#pe').textContent='Không lưu được: chỉ quản trị viên mới đăng được tin.';return}}
+    else{state.localNews=state.localNews.filter(x=>x.id!==id);state.localNews.push(Object.assign({id},o))}
+    if(old){state.news=state.news.filter(x=>x.id!==id)}
+    closeDialog();
+    if(location.hash==='#tin-tuc-'+id)route();else location.hash='#tin-tuc-'+id;
   };
 }
 
