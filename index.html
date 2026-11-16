@@ -174,6 +174,7 @@ a.btn{display:inline-flex;align-items:center}a.btn:hover{text-decoration:none}
 .rolebox{margin:0 0 12px;padding:8px 12px;border-left:4px solid #c9a23f;background:#fbf4de;border-radius:6px;font-size:14px;line-height:1.6}.rolebox b{color:#8c1c1c}
 .nvw{display:flex;align-items:center;gap:8px}.nvw nav{flex:1;min-width:0}.auth{display:flex;gap:8px;align-items:center;font-size:13px;white-space:nowrap;color:var(--muted)}
 .auth .who{max-width:170px;overflow:hidden;text-overflow:ellipsis}
+.tabs a[hidden]{display:none!important}
 footer{border-top:1px solid var(--line);padding:16px 0 30px;color:var(--muted);font-size:12px}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
@@ -316,15 +317,15 @@ function modeBanner(){
    ? '<b>Chế độ chạy thử.</b> Chưa kết nối Firebase, nên yêu cầu, bài viết và sự kiện chỉ lưu trong tab này và mất khi tải lại trang.'+(state.why?' <span class="small">Lý do: '+esc(state.why)+'</span>':'')
    : state.isAdmin ? '<b>Bạn đang đăng nhập với quyền quản trị.</b> Mục Duyệt cập nhật hiện ở thanh trên cùng.'
    : state.user ? '<b>Đã đăng nhập.</b> Yêu cầu cập nhật của bạn sẽ được ban biên soạn duyệt trước khi hiển thị trên gia phả.'
-   : '<b>Gia phả riêng tư.</b> Hãy đăng nhập; tài khoản mới cần ban biên soạn duyệt mới xem được.';
+   : '<b>Trang chủ, lịch sự kiện và blog xem tự do.</b> Phần gia phả cần đăng nhập và được ban biên soạn duyệt.';
 }
 
 /* search */
 function renderSearch(){
   const gens=[...new Set(DATA.map(p=>p.d))].sort((a,b)=>a-b);
   $('#view').innerHTML=`
-  <h2>Tra cứu thành viên</h2>
-  <div class="card stack">
+  <div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">Tra cứu thành viên</h2>${adm()?'<button class="btn sm" id="addm">＋ Thêm thành viên</button>':''}</div>
+  <div class="card stack" style="margin-top:12px">
     <div class="row">
       <label class="f" style="flex:2;min-width:220px">Tên, tên cha mẹ, nơi ở hoặc ghi chú
         <input type="search" id="q" value="${esc(state.q)}" placeholder="Ví dụ: Nguyễn Đặng Táo, Đà Nẵng, Hội Yên"></label>
@@ -337,6 +338,7 @@ function renderSearch(){
   <div id="res" style="margin-top:16px"></div>`;
   ['q','fd','fb','ft'].forEach(id=>$('#'+id).addEventListener('input',e=>{state[id]=e.target.value;state.shown=40;renderResults()}));
   $('#fm').addEventListener('change',e=>{state.fm=e.target.checked;state.shown=40;renderResults()});
+  const am=$('#addm');if(am)am.onclick=()=>addMemberDialog();
   renderResults();
 }
 const norm=s=>String(s||'').toLowerCase().normalize('NFC');
@@ -398,7 +400,7 @@ function renderProfile(id,soft){
       ${kids.length?`<div><span class="muted">Con (${kids.length}): </span>${kids.map(k=>link(k)+' <span class="small muted">('+(isF(k)?'con gái':'con trai')+')</span>').join(', ')}</div>`:(p0.r==='C'?'<div class="muted">Chưa có thông tin về con trong bảng.</div>':'')}
     </div>
     <div class="row" style="margin-top:12px"><button class="btn ghost sm" data-rel="addchild">＋ Thêm con</button>${p0.r==='C'?'<button class="btn ghost sm" data-rel="addspouse">＋ Thêm vợ hoặc chồng</button>':''}${(p0.r==='C'&&(!father||!mother))?`<button class="btn ghost sm" data-rel="setparent">${!father&&!mother?'Gắn cha hoặc mẹ':!father?'Bổ sung cha':'Bổ sung mẹ'}</button>`:''}</div>
-    ${adm()?`<div class="row" style="margin-top:8px"><span class="small muted">Quản trị:</span><button class="btn sm" data-adm="edit">Sửa thông tin</button><button class="btn ghost sm" data-adm="vt">Thêm vai trò</button>${(p0.r==='C'&&(father||mother))?'<button class="btn ghost sm" data-rel="setparent">Đổi cha hoặc mẹ</button>':''}${father?'<button class="btn ghost sm" data-adm="rmf">Gỡ cha</button>':''}${mother?'<button class="btn ghost sm" data-adm="rmm">Gỡ mẹ</button>':''}${p0.added?'<button class="btn ghost sm" data-adm="del">Xoá người này</button>':''}</div>`:''}
+    ${adm()?`<div class="row" style="margin-top:8px"><span class="small muted">Quản trị:</span><button class="btn sm" data-adm="edit">Sửa thông tin</button><button class="btn ghost sm" data-adm="vt">Thêm vai trò</button>${(p0.r==='C'&&(father||mother))?'<button class="btn ghost sm" data-rel="setparent">Đổi cha hoặc mẹ</button>':''}${father?'<button class="btn ghost sm" data-adm="rmf">Gỡ cha</button>':''}${(!father&&p0.r==='C'&&fatherKey(p0))?`<button class="btn sm" data-adm="mkf">Tạo hồ sơ cha: ${esc(fatherName(p0))}</button>`:''}${mother?'<button class="btn ghost sm" data-adm="rmm">Gỡ mẹ</button>':''}${p0.added?'<button class="btn ghost sm" data-adm="del">Xoá người này</button>':''}</div>`:''}
     ${pend.filter(r=>String(r.field).startsWith('@')).length?`<p class="small" style="margin:8px 0 0"><span class="pend">${pend.filter(r=>String(r.field).startsWith('@')).length} đề nghị về quan hệ đang chờ duyệt</span></p>`:''}</div>
     ${p0.dq?`<div class="card small"><h3>Lưu ý về dữ liệu</h3>${esc(p0.dq)}</div>`:''}
     <div class="card small muted">${p0.added?'Nguồn: do con cháu bổ sung và đã được ban biên soạn duyệt.':'Nguồn: gia phả phái 3 (bản 2008), bảng số '+p0.b+'.'} ${miss.length?`Còn ${miss.length} mục cần thu thập.`:'Hồ sơ đã đủ các mục theo dõi.'}</div>
@@ -645,9 +647,82 @@ async function admAct(kind,id){
     else if(kind==='rmm'){await saveOv(P,{m:0,mn:''});refresh()}
     else if(kind==='edit')adminEditDialog(P);
     else if(kind==='vt')vtDialog(P);
+    else if(kind==='mkf')makeFatherDialog(P);
     else if(kind.startsWith('vtdel-')){const i=+kind.slice(6);await saveOv(P,{vt:vtOf(P.i).filter((e,k)=>k!==i)});refresh()}
     else if(kind==='del')delMemberDialog(P);
   }catch(e){alert_('Không ghi được vào kho chung. Hãy thử lại.')}}
+/* ---------- tạo hồ sơ cho người chỉ được ghi tên, và thêm thành viên mới ---------- */
+const fatherName=p=>titleVN(String(p.fn||'').replace(/\s+và\s+.*$/i,'').trim());
+const fatherKey=p=>fold(fatherName(p));
+function wifeName(x){let t=x.mn||'';if(!t){const m=String(x.fn||'').match(/\s+và\s+(.*)$/i);t=m?m[1]:''}
+  t=t.replace(/(chánh|thứ)\s*thất\s*:?/ig,'').replace(/ngoài\s*hôn\s*thú/ig,'').replace(/^[\s:,\-]+|[\s:,\-]+$/g,'').trim();
+  return (!t||/cải\s*giá/i.test(t))?'':titleVN(t)}
+async function putMember(rec){if(DB)await DB.doc('newmembers/m'+rec.i).set(rec);state.extra=state.extra.filter(x=>x.i!==rec.i).concat([rec])}
+function recFrom(person,base){const rec=Object.assign({},base,{n:person.n,added:1});
+  ['gt','tt','sd','sa','bp','md','ma','nt','fb'].forEach(k=>{if(person[k])rec[k]=person[k]});
+  if(base.gt)rec.gt=base.gt;
+  const ym=String(person.sd||'').match(/(1[5-9]\d\d|20\d\d)/);if(ym)rec.y=+ym[1];
+  Object.keys(rec).forEach(k=>{if(rec[k]===undefined||rec[k]===null)delete rec[k]});return rec}
+function makeFatherDialog(P){
+  const key=fatherKey(P),kin=DATA.filter(x=>x.r==='C'&&!x.f&&x.d===P.d&&fatherKey(x)===key);
+  const wives={};kin.forEach(x=>{const w=wifeName(x);if(w)(wives[w]=wives[w]||[]).push(x.i)});
+  const wl=Object.keys(wives);
+  const d=$('#dlg');d.className='dlg wide';
+  d.innerHTML=`<h2 id="dtitle">Tạo hồ sơ cha: ${esc(fatherName(P))}</h2>
+  <p class="meta">Trong dữ liệu gốc, người cha này chỉ được ghi bằng tên, chưa có hồ sơ riêng. Bấm Tạo để lập hồ sơ ở đời ${P.d-1} và nối các con cùng ghi tên cha này. Dữ liệu gốc không bị đổi.</p>
+  <form id="mf" class="stack" novalidate>
+  ${personHTML('Nam')}
+  <div class="card small" style="margin:0"><b>Các con sẽ được nối vào cha này (${kin.length} người)</b><div class="stack" style="margin-top:6px">${kin.map(x=>`<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="mk" value="${x.i}" checked> ${esc(nm(x))} <span class="small muted">${x.gt==='Nữ'?'con gái':'con trai'}${wifeName(x)?' · mẹ ghi: '+esc(wifeName(x)):''}</span></label>`).join('')}</div></div>
+  ${wl.length?`<div class="card small" style="margin:0"><b>Vợ của người cha (tạo hồ sơ vợ và nối làm mẹ của các con tương ứng)</b><div class="stack" style="margin-top:6px">${wl.map((w,i)=>`<label style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input type="checkbox" class="mw" data-i="${i}" checked> <input type="text" class="mwn" data-i="${i}" value="${esc(w)}" style="flex:1;min-width:180px"> <span class="small muted">mẹ của ${wives[w].length} người</span></label>`).join('')}</div></div>`:''}
+  <div class="err" id="me" role="alert"></div>
+  <div class="row"><button class="btn" type="submit">Tạo hồ sơ và nối</button><button class="btn ghost" type="button" id="mx">Đóng</button></div></form>`;
+  $('#rn').value=fatherName(P);$('#ov').hidden=false;$('#mx').onclick=closeDialog;
+  const rt=$('#rt');if(rt)rt.onchange=()=>{$('#rdd').hidden=rt.value!=='Đã mất'};
+  $('#mf').onsubmit=async e=>{e.preventDefault();const E=t=>{$('#me').textContent=t};
+    const person=readPerson();if(!person.n){E('Hãy nhập họ và tên.');return}
+    try{
+      let nid=nextId();const fid=nid++;
+      const br=P.br==null?undefined:P.br;
+      const frec=recFrom(person,{i:fid,gt:'Nam',r:'C',d:P.d-1,br});await putMember(frec);
+      const wid={};
+      for(const c of document.querySelectorAll('.mw:checked')){const i=+c.dataset.i,nmw=titleVN(document.querySelector('.mwn[data-i="'+i+'"]').value);if(!nmw)continue;
+        const wr=recFrom({n:nmw},{i:nid++,gt:'Nữ',r:'D',d:P.d-1,sp:fid,br});await putMember(wr);wid[wl[i]]=wr.i}
+      for(const c of document.querySelectorAll('.mk:checked')){const k=byid.get(+c.value);if(!k)continue;
+        const patch={f:fid},w=wifeName(k);if(w&&wid[w])patch.m=wid[w];await saveOv(k,patch)}
+      closeDialog();refresh();location.hash='#ho-so-'+fid;
+    }catch(err){E('Không ghi được vào kho chung. Hãy thử lại. Một phần có thể đã được ghi, hãy kiểm tra lại hồ sơ.')}}}
+function addMemberDialog(){
+  const d=$('#dlg');d.className='dlg wide';
+  const gens=[...new Set(DATA.map(p=>p.d))].sort((a,b)=>a-b);const gmax=Math.max(20,...gens);
+  d.innerHTML=`<h2 id="dtitle">Thêm thành viên vào phả hệ</h2>
+  <form id="mf" class="stack" novalidate>
+  <label class="f">Người này là<select id="mk"><option value="c">Con cháu trong họ (cùng họ Nguyễn Đặng)</option><option value="s">Vợ hoặc chồng của một người trong họ</option></select></label>
+  <div class="grid2" style="gap:10px"><label class="f" id="mdw">Đời (dùng khi chưa chọn cha hoặc mẹ)<select id="mdd">${Array.from({length:gmax-7},(_,i)=>8+i).map(g=>`<option value="${g}"${g===14?' selected':''}>Đời ${g}</option>`).join('')}</select></label>
+  <label class="f" id="mbw">Nhánh<select id="mbr">${Object.entries(BR).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label></div>
+  <label class="f"><span id="mql">Là con của (gõ ít nhất 2 chữ của tên cha hoặc mẹ; có thể bỏ trống)</span><input type="text" id="mq" autocomplete="off"></label>
+  <div id="ml" class="stack" style="margin-bottom:6px"></div>
+  ${personHTML('Nam')}
+  <div class="err" id="me" role="alert"></div>
+  <div class="row"><button class="btn" type="submit">Thêm vào phả hệ</button><button class="btn ghost" type="button" id="mx">Đóng</button></div></form>`;
+  $('#ov').hidden=false;$('#mx').onclick=closeDialog;
+  const rt=$('#rt');if(rt)rt.onchange=()=>{$('#rdd').hidden=rt.value!=='Đã mất'};
+  const kind=()=>$('#mk').value;
+  const search=()=>{const q=fold($('#mq').value),g=+$('#mdd').value;
+    const hits=q.length<2?[]:DATA.filter(x=>fold(clean(x.n)).includes(q)&&(kind()==='s'?x.r==='C':true)).slice(0,10);
+    $('#ml').innerHTML=q.length<2?'':hits.length?hits.map(x=>`<label style="display:flex;gap:8px;align-items:center"><input type="radio" name="mw" value="${x.i}"> ${esc(nm(x))} <span class="small muted">đời ${x.d}${x.r==='D'?', '+(isF(x)?'dâu':'rể'):''}${x.y?', sinh '+x.y:''}</span></label>`).join(''):'<span class="small muted">Không thấy ai khớp.</span>'};
+  const sync=()=>{const s=kind()==='s';$('#mql').textContent=s?'Là vợ hoặc chồng của (gõ ít nhất 2 chữ của tên người trong họ)':'Là con của (gõ ít nhất 2 chữ của tên cha hoặc mẹ; có thể bỏ trống)';
+    $('#mdw').hidden=s;$('#mbw').hidden=s;const g=$('#rg');if(g&&!g.dataset.t){}search()};
+  $('#mk').onchange=sync;$('#mq').oninput=search;
+  $('#mf').onsubmit=async e=>{e.preventDefault();const E=t=>{$('#me').textContent=t};
+    const person=readPerson();if(!person.n){E('Hãy nhập họ và tên.');return}
+    const w=document.querySelector('input[name=mw]:checked'),T=w&&byid.get(+w.value);
+    try{
+      if(kind()==='s'){if(!T){E('Hãy chọn người trong họ mà người này là vợ hoặc chồng.');return}
+        await applyRel({field:'@addspouse',pidn:T.i,person});closeDialog();refresh();return}
+      if(T){await applyRel({field:'@addchild',pidn:T.i,person:Object.assign({},person,{oth:0})});closeDialog();refresh();return}
+      const rec=recFrom(person,{i:nextId(),r:'C',d:+$('#mdd').value,br:+$('#mbr').value,gt:person.gt});await putMember(rec);
+      closeDialog();refresh();location.hash='#ho-so-'+rec.i;
+    }catch(err){E('Không ghi được vào kho chung. Hãy thử lại.')}}}
 function vtDialog(P){
   const d=$('#dlg');d.className='dlg wide';
   d.innerHTML=`<h2 id="dtitle">Thêm vai trò cho ${esc(nm(P))}</h2>
@@ -886,7 +961,7 @@ function authErr(e){const c=(e&&e.code)||'';
    :c==='auth/unauthorized-domain'?'Tên miền trang này chưa được thêm vào Firebase (mục Authorized domains).':'Không đăng nhập được. Hãy thử lại.'}
 function loginDialog(msg){
   $('#dlg').className='dlg';
-  $('#dlg').innerHTML=`<h2 id="dtitle">Đăng nhập</h2><p class="meta">${esc(msg||'Đây là gia phả riêng tư. Đăng nhập hoặc tạo tài khoản, sau đó chờ ban biên soạn cho phép xem.')}</p>
+  $('#dlg').innerHTML=`<h2 id="dtitle">Đăng nhập</h2><p class="meta">${esc(msg||'Đăng nhập hoặc tạo tài khoản để đóng góp. Muốn xem phần gia phả, bạn cần được ban biên soạn cho phép.')}</p>
   <p><button class="btn" id="lg" style="width:100%">Đăng nhập bằng Google</button></p>
   <p class="meta" style="text-align:center;margin:6px 0">hoặc dùng email</p>
   <label class="f">Email<input type="text" id="le" autocomplete="email" inputmode="email"></label>
@@ -904,18 +979,22 @@ function loginDialog(msg){
 
 /* ---- trang riêng tư: màn hình chờ, nạp dữ liệu gốc, quản lý tài khoản ---- */
 function setBase(arr){DATA.length=0;arr.forEach(p=>DATA.push(p));BASE_N=DATA.length;Object.keys(BASE_REL).forEach(k=>delete BASE_REL[k]);DATA.forEach(p=>{BASE_REL[p.i]={f:p.f,m:p.m,s:(p.s||[]).slice()}})}
+const PUB_TABS=['trang-chu','lich','blog'];
+function isPub(h){return h===''||h==='lich-su'||PUB_TABS.includes(h)||h.startsWith('bai-viet-')}
 function gateView(){
   const v=$('#view'),tabs=$('#tabs'),h=(location.hash||'#trang-chu').slice(1);
   if(state.mode!=='db'){tabs.hidden=true;v.innerHTML=`<div class="card" style="max-width:560px;margin:24px auto;text-align:center"><h2 style="margin-top:0">${state.why?'Chưa kết nối được Firebase':'Đang tải…'}</h2>${state.why?'<p>'+esc(state.why)+'</p>':''}</div>`;return true}
-  const show=(html)=>{tabs.hidden=state.access!=='approved';v.innerHTML=html;
-    const l=$('#gl');if(l)l.onclick=()=>loginDialog();const o=$('#go');if(o)o.onclick=()=>FB.U.signOut(FB.au)};
+  const ok=state.access==='approved';
+  tabs.hidden=false;
+  tabs.querySelectorAll('a').forEach(a=>{const t=a.dataset.t;a.hidden=t==='duyet'?!state.isAdmin:!(ok||PUB_TABS.includes(t))});
+  if(isPub(h))return false;
+  const show=html=>{v.innerHTML=html;const l=$('#gl');if(l)l.onclick=()=>loginDialog();const o=$('#go');if(o)o.onclick=()=>FB.U.signOut(FB.au)};
   const box=(t,p,extra)=>`<div class="card" style="max-width:560px;margin:24px auto;text-align:center"><h2 style="margin-top:0">${t}</h2>${p}${extra||''}</div>`;
   if(!state.authReady){show(box('Đang kiểm tra đăng nhập…',''));return true}
-  if(!state.user){show(box('Gia phả họ Đặng là tài liệu riêng của dòng họ','<p>Chỉ thành viên đã được ban biên soạn cho phép mới xem được. Hãy đăng nhập, hoặc tạo tài khoản nếu bạn chưa có. Sau khi gửi, ban biên soạn sẽ duyệt tài khoản của bạn.</p>','<p><button class="btn" id="gl">Đăng nhập hoặc tạo tài khoản</button></p>'));return true}
+  if(!state.user){show(box('Phần gia phả là tài liệu riêng của dòng họ','<p>Trang chủ, lịch sự kiện và blog ai cũng xem được. Còn tra cứu, phả đồ và hồ sơ từng người chỉ dành cho thành viên đã được ban biên soạn cho phép. Hãy đăng nhập, hoặc tạo tài khoản nếu bạn chưa có, rồi chờ ban biên soạn duyệt.</p>','<p><button class="btn" id="gl">Đăng nhập hoặc tạo tài khoản</button></p>'));return true}
   if(state.access==='checking'){show(box('Đang kiểm tra quyền truy cập…',''));return true}
   if(state.access==='pending'){show(box('Tài khoản đang chờ duyệt',`<p>Bạn đã đăng nhập bằng <b>${esc(state.user.email)}</b>. Ban biên soạn sẽ xem xét và cho phép bạn xem gia phả. Hãy quay lại sau, hoặc nhắn cho ban biên soạn biết email này để được duyệt nhanh hơn.</p>`,'<p><button class="btn ghost" id="go">Đăng xuất</button></p>'));return true}
   if(state.access==='rejected'){show(box('Tài khoản chưa được cho phép xem',`<p>Tài khoản <b>${esc(state.user.email)}</b> chưa được ban biên soạn duyệt. Nếu bạn là con cháu trong họ, hãy liên hệ ban biên soạn.</p>`,'<p><button class="btn ghost" id="go">Đăng xuất</button></p>'));return true}
-  tabs.hidden=false;
   if(!state.baseReady){v.innerHTML=box('Đang tải gia phả…','');return true}
   if(!DATA.length&&h!=='duyet'){v.innerHTML=box('Chưa có dữ liệu gia phả',state.isAdmin?'<p>Hãy vào mục <a href="#duyet">Duyệt cập nhật</a> và nạp tệp <b>members.json</b> (dữ liệu gốc) lên một lần.</p>':'<p>Ban biên soạn chưa nạp dữ liệu. Hãy quay lại sau.</p>');return true}
   return false}
@@ -961,20 +1040,21 @@ async function initDb(){
     const col=n=>F.collection(fs,n);
     /* chỉ tài khoản đã được duyệt mới đọc được dữ liệu */
     const resub=()=>{unsubAuth.forEach(f=>f());unsubAuth=[];
-      state.overrides={};state.ph={};state.gal={};state.phUid={};state.galUid={};state.requests=[];state.extra=[];state.posts=[];state.events=[];state.rsvps=[];state.users=[];state.denied=false;state.baseReady=false;setBase([]);mergePhotos();
+      state.overrides={};state.ph={};state.phUid={};state.requests=[];state.extra=[];state.users=[];state.denied=false;state.baseReady=false;setBase([]);mergePhotos();
       if(!state.user||state.access!=='approved'){refresh();return}
       const add=x=>unsubAuth.push(x);
       add(sub(col('base'),L=>{const arr=[];L.slice().sort((x,y)=>x.id<y.id?-1:1).forEach(x=>{(x.v.l||[]).forEach(m=>arr.push(m))});state.baseIds=L.map(x=>x.id);setBase(arr);state.baseReady=true;refresh()},()=>{state.baseReady=true;refresh()}));
-      add(sub(col('posts'),L=>{state.posts=L.map(x=>Object.assign({id:x.id},x.v));refresh()}));
-      add(sub(col('events'),L=>{state.events=L.map(x=>Object.assign({id:x.id},x.v));refresh()}));
-      add(sub(col('rsvps'),L=>{state.rsvps=L.map(x=>Object.assign({id:x.id},x.v));refresh()}));
-      add(sub(col('gallery'),L=>{state.gal={};state.galUid={};L.forEach(x=>{if(x.v&&x.v.d){state.gal[x.id]=x.v.d;state.galUid[x.id]=x.v.uid}});mergePhotos();refresh()}));
       add(sub(col('overrides'),L=>{state.overrides={};L.forEach(x=>{state.overrides[x.id]=x.v});refresh()}));
       add(sub(col('newmembers'),L=>{state.extra=L.map(x=>Object.assign({},x.v));refresh()}));
       add(sub(col('photos'),L=>{state.ph={};state.phUid={};L.forEach(x=>{if(x.v&&x.v.d){state.ph[x.id.slice(1)]=x.v.d;state.phUid[x.id.slice(1)]=x.v.uid}});mergePhotos();refresh()}));
       const q=state.isAdmin?col('requests'):F.query(col('requests'),F.where('uid','==',state.user.uid));
       add(sub(q,L=>{state.requests=L.map(x=>Object.assign({rid:x.id},x.v));state.denied=false;refresh()},()=>{state.denied=true;refresh()}));
       if(state.isAdmin)add(sub(col('users'),L=>{state.users=L.map(x=>Object.assign({id:x.id},x.v));refresh()}))};
+    /* công khai: blog, lịch sự kiện, đăng ký tham dự, ảnh tư liệu (không cần đăng nhập) */
+    sub(col('posts'),L=>{state.posts=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
+    sub(col('events'),L=>{state.events=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
+    sub(col('rsvps'),L=>{state.rsvps=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
+    sub(col('gallery'),L=>{state.gal={};state.galUid={};L.forEach(x=>{if(x.v&&x.v.d){state.gal[x.id]=x.v.d;state.galUid[x.id]=x.v.uid}});mergePhotos();refresh()});
     let lastKey=null,unsubU=null;
     const onAccess=()=>{const k=(state.user?state.user.uid:'')+'|'+state.access+'|'+state.isAdmin;
       $('#tabduyet').hidden=!state.isAdmin;renderAuth();
@@ -1133,7 +1213,7 @@ function renderHome(){
   <section class="hero2"><div class="in"><h2>Họ Nguyễn Đặng, làng Cổ Lũy</h2>
    <p>Một trong những họ lớn của làng Cổ Lũy, xã Hải Ba, huyện Hải Lăng, Quảng Trị. Nơi con cháu tìm lại cội nguồn, cập nhật gia phả, xem lịch kỵ giỗ họp họ và chia sẻ những câu chuyện của dòng họ.</p>
    <div class="row"><a class="btn gold" href="#tra-cuu">Tra cứu gia phả</a><a class="btn line" href="#lich">Lịch sự kiện của họ</a><a class="btn line" href="#blog">Đọc blog dòng họ</a></div></div></section>
-  <div class="stats3"><div><b>${DATA.length}</b><span>thành viên đã nhập (đời 9 đến 17)</span></div><div><b>16</b><span>đời kể từ Nhất Thế Tổ</span></div><div><b>4</b><span>nhánh từ cụ Nguyễn Đình Thăng</span></div><div><b>2</b><span>ngày giỗ lớn mỗi năm</span></div></div>
+  <div class="stats3"><div><b>${DATA.length||"…"}</b><span>thành viên đã nhập (đời 9 đến 17)</span></div><div><b>16</b><span>đời kể từ Nhất Thế Tổ</span></div><div><b>4</b><span>nhánh từ cụ Nguyễn Đình Thăng</span></div><div><b>2</b><span>ngày giỗ lớn mỗi năm</span></div></div>
   <div class="card" style="margin-bottom:16px"><div class="calbar"><h2>Sắp tới trong họ</h2><a class="btn ghost sm" href="#lich">Xem cả lịch</a></div>
    <div class="evl">${ups.map(u=>evCard(u.ev,u.occ)).join('')||'<p class="meta">Chưa có sự kiện nào.</p>'}</div></div>
   <section class="hero" style="margin-top:0"><h2>Lịch sử họ Nguyễn Đặng</h2>
