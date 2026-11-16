@@ -272,10 +272,10 @@ function buildIndex(){
   const seen=new Set(DATA.map(p=>p.i));
   state.extra.slice().sort((a,b)=>a.i-b.i).forEach(x=>{if(seen.has(x.i))return;seen.add(x.i);DATA.push(x)});
   DATA.forEach(p=>{
-    if(!p._o)p._o={n:p.n,y:p.y,f:p.f,m:p.m,fn:p.fn,mn:p.mn};
+    if(!p._o)p._o={n:p.n,y:p.y,f:p.f,m:p.m,fn:p.fn,mn:p.mn,r:p.r,d:p.d,sp:p.sp};
     Object.assign(p,p._o);const b=BASE_REL[p.i];p.s=b?b.s.slice():[];
     const o=state.overrides[pid(p.i)];
-    if(o){if(o.n)p.n=o.n;['y','f','m','fn','mn'].forEach(k=>{if(k in o)p[k]=o[k]||null})}});
+    if(o){if(o.n)p.n=o.n;['y','f','m','fn','mn','sp'].forEach(k=>{if(k in o)p[k]=o[k]||null});if(o.r)p.r=o.r;if(o.d)p.d=o.d}});
   byid.clear();DATA.forEach(p=>byid.set(p.i,p));
   DATA.forEach(x=>{if(x.sp&&byid.get(x.sp))byid.get(x.sp).s.push(x.i)});
   partnerOf.clear();kidsOf.clear();
@@ -400,7 +400,7 @@ function renderProfile(id,soft){
       ${kids.length?`<div><span class="muted">Con (${kids.length}): </span>${kids.map(k=>link(k)+' <span class="small muted">('+(isF(k)?'con gái':'con trai')+')</span>').join(', ')}</div>`:(p0.r==='C'?'<div class="muted">Chưa có thông tin về con trong bảng.</div>':'')}
     </div>
     <div class="row" style="margin-top:12px"><button class="btn ghost sm" data-rel="addchild">＋ Thêm con</button>${p0.r==='C'?'<button class="btn ghost sm" data-rel="addspouse">＋ Thêm vợ hoặc chồng</button>':''}${(p0.r==='C'&&(!father||!mother))?`<button class="btn ghost sm" data-rel="setparent">${!father&&!mother?'Gắn cha hoặc mẹ':!father?'Bổ sung cha':'Bổ sung mẹ'}</button>`:''}</div>
-    ${adm()?`<div class="row" style="margin-top:8px"><span class="small muted">Quản trị:</span><button class="btn sm" data-adm="edit">Sửa thông tin</button><button class="btn ghost sm" data-adm="vt">Thêm vai trò</button>${(p0.r==='C'&&(father||mother))?'<button class="btn ghost sm" data-rel="setparent">Đổi cha hoặc mẹ</button>':''}${father?'<button class="btn ghost sm" data-adm="rmf">Gỡ cha</button>':''}${(!father&&p0.r==='C'&&fatherKey(p0))?`<button class="btn sm" data-adm="mkf">Tạo hồ sơ cha: ${esc(fatherName(p0))}</button>`:''}${mother?'<button class="btn ghost sm" data-adm="rmm">Gỡ mẹ</button>':''}${p0.added?'<button class="btn ghost sm" data-adm="del">Xoá người này</button>':''}</div>`:''}
+    ${adm()?`<div class="row" style="margin-top:8px"><span class="small muted">Quản trị:</span><button class="btn sm" data-adm="edit">Sửa thông tin</button><button class="btn ghost sm" data-adm="vt">Thêm vai trò</button>${(p0.r==='C'&&(father||mother))?'<button class="btn ghost sm" data-rel="setparent">Đổi cha hoặc mẹ</button>':''}${father?'<button class="btn ghost sm" data-adm="rmf">Gỡ cha</button>':''}${(!father&&p0.r==='C'&&fatherKey(p0))?`<button class="btn sm" data-adm="mkf">Tạo hồ sơ cha: ${esc(fatherName(p0))}</button>`:''}${mother?'<button class="btn ghost sm" data-adm="rmm">Gỡ mẹ</button>':''}${(state.overrides[pid(p0.i)]||{}).sp?'<button class="btn ghost sm" data-adm="unsp">Gỡ nối vợ/chồng (trả về như dữ liệu gốc)</button>':''}${p0.added?'<button class="btn ghost sm" data-adm="del">Xoá người này</button>':''}</div>`:''}
     ${pend.filter(r=>String(r.field).startsWith('@')).length?`<p class="small" style="margin:8px 0 0"><span class="pend">${pend.filter(r=>String(r.field).startsWith('@')).length} đề nghị về quan hệ đang chờ duyệt</span></p>`:''}</div>
     ${p0.dq?`<div class="card small"><h3>Lưu ý về dữ liệu</h3>${esc(p0.dq)}</div>`:''}
     <div class="card small muted">${p0.added?'Nguồn: do con cháu bổ sung và đã được ban biên soạn duyệt.':'Nguồn: gia phả phái 3 (bản 2008), bảng số '+p0.b+'.'} ${miss.length?`Còn ${miss.length} mục cần thu thập.`:'Hồ sơ đã đủ các mục theo dõi.'}</div>
@@ -647,6 +647,8 @@ async function admAct(kind,id){
     else if(kind==='rmm'){await saveOv(P,{m:0,mn:''});refresh()}
     else if(kind==='edit')adminEditDialog(P);
     else if(kind==='vt')vtDialog(P);
+    else if(kind==='unsp'){const key=pid(P.i),next=Object.assign({},state.overrides[key]||{});['r','sp','d','f','m','fn','mn','gt'].forEach(k=>delete next[k]);
+      if(DB)await DB.doc('overrides/'+key).set(next);state.overrides[key]=next;refresh()}
     else if(kind==='mkf')makeFatherDialog(P);
     else if(kind.startsWith('vtdel-')){const i=+kind.slice(6);await saveOv(P,{vt:vtOf(P.i).filter((e,k)=>k!==i)});refresh()}
     else if(kind==='del')delMemberDialog(P);
@@ -734,10 +736,13 @@ function vtDialog(P){
   <div id="vl" class="stack" style="margin-bottom:6px"></div>
   <label class="f">Hoặc ghi tên nếu người đó chưa có trong phả hệ<input type="text" id="vn" maxlength="80"></label>
   <label class="f">Ghi chú (không bắt buộc)<input type="text" id="vt" maxlength="120" placeholder="Ví dụ: lấy chồng năm 1990"></label>
+  <label class="small" id="vlkw" style="display:none;align-items:flex-start;gap:8px"><input type="checkbox" id="vlk" checked> <span><b>Đồng thời nối làm vợ hoặc chồng trong phả hệ</b>, để hiện cạnh người đó trên cây phả đồ. Hồ sơ này sẽ chuyển thành dâu hoặc rể, cùng đời với người được chọn và được gỡ khỏi cha mẹ cũ.</span></label>
+  <p class="small muted" id="vhint" style="display:none">"Con dâu" hay "con rể" chỉ là ghi chú hiển thị. Muốn người này hiện trên cây phả đồ là vợ hoặc chồng, hãy thêm vai trò <b>Vợ</b> hoặc <b>Chồng</b> và giữ ô nối làm vợ hoặc chồng.</p>
   <div class="err" id="ve" role="alert"></div>
   <div class="row"><button class="btn" type="submit">Lưu vai trò</button><button class="btn ghost" type="button" id="vx">Đóng</button></div></form>`;
   $('#ov').hidden=false;$('#vx').onclick=closeDialog;
-  $('#vr').onchange=()=>{$('#vkw').hidden=$('#vr').value!=='Khác'};
+  const syncVr=()=>{const r=$('#vr').value;$('#vkw').hidden=r!=='Khác';const sp=r==='Vợ'||r==='Chồng';$('#vlkw').style.display=sp?'flex':'none';$("#vhint").style.display=(r==="Con dâu"||r==="Con rể")?"block":"none"};
+  $('#vr').onchange=syncVr;syncVr();
   $('#vq').oninput=()=>{const q=fold($('#vq').value);
     const hits=q.length<2?[]:DATA.filter(x=>x.i!==P.i&&fold(clean(x.n)).includes(q)).slice(0,10);
     $('#vl').innerHTML=q.length<2?'':hits.length?hits.map(x=>`<label style="display:flex;gap:8px;align-items:center"><input type="radio" name="vw" value="${x.i}"> ${esc(nm(x))} <span class="small muted">đời ${x.d}${x.r==='D'?', '+(isF(x)?'dâu':'rể'):''}${x.y?', sinh '+x.y:''}</span></label>`).join(''):'<span class="small muted">Không thấy ai khớp.</span>'};
@@ -746,7 +751,13 @@ function vtDialog(P){
     const w=document.querySelector('input[name=vw]:checked'),wn=titleVN($('#vn').value),t=$('#vt').value.trim();
     if(!w&&!wn){E('Hãy chọn một người trong danh sách, hoặc ghi tên.');return}
     const ent={r};if(w)ent.w=+w.value;else ent.wn=wn;if(t)ent.t=t;
-    try{await saveOv(P,{vt:vtOf(P.i).concat([ent])});closeDialog();refresh()}catch(err){E('Không ghi được vào kho chung. Hãy thử lại.')}}}
+    const patch={vt:vtOf(P.i).concat([ent])};
+    const T=w&&byid.get(+w.value);
+    if((r==='Vợ'||r==='Chồng')&&T&&$('#vlk').checked&&!(P.s||[]).includes(T.i)&&!(T.s||[]).includes(P.i)){
+      if(T.r!=='C'){E('Người được chọn không phải người trong họ nên không nối làm vợ hoặc chồng được. Hãy bỏ tích ô nối, hoặc chọn người trong họ.');return}
+      if(P.r==='C'&&(kidsOf.get(P.i)||[]).length){E('Người này đang có con gắn với hồ sơ nên không chuyển thành vợ hoặc chồng được. Hãy bỏ tích ô nối.');return}
+      Object.assign(patch,{r:'D',sp:T.i,d:T.d,f:0,m:0,fn:'',mn:'',gt:r==='Vợ'?'Nữ':'Nam'})}
+    try{await saveOv(P,patch);closeDialog();refresh()}catch(err){E('Không ghi được vào kho chung. Hãy thử lại.')}}}
 function adminEditDialog(P){
   const d=$('#dlg');d.className='dlg wide';
   const cell=f=>{const v=val(P,f.k)||'';
