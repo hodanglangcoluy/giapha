@@ -1567,7 +1567,7 @@ function renderCal(){
   <div class="card"><h2 style="margin-top:0">Các sự kiện sắp tới</h2><div class="evl">${ups.map(u=>evCard(u.ev,u.occ)).join('')||'<p class="meta">Chưa có sự kiện nào.</p>'}</div></div>`;
   const step=k=>{let mm=state.cal.m+k,yy=state.cal.y;if(mm<1){mm=12;yy--}if(mm>12){mm=1;yy++}state.cal={y:yy,m:mm};renderCal()};
   $('#cp').onclick=()=>step(-1);$('#cn').onclick=()=>step(1);$('#ct').onclick=()=>{const n=new Date();state.cal={y:n.getFullYear(),m:n.getMonth()+1};renderCal()};
-  $('#addev').onclick=addEvDialog;bindEv($('#view'));
+  $('#addev').onclick=()=>addEvDialog();bindEv($('#view'));
 }
 function evDialog(id,occ){
   const ev=allEv().find(e=>e.id===id);if(!ev)return;const p=parts(occ),rs=rsOf(id,occ),n=rs.reduce((s,r)=>s+(+r.k||1),0);
@@ -1577,8 +1577,9 @@ function evDialog(id,occ){
   ${ev.nt?`<p>${esc(ev.nt).replace(/\n/g,'<br>')}</p>`:''}${ev.by?`<p class="meta">Người đăng: ${esc(ev.by)}</p>`:''}
   <h3 style="margin-top:12px">Đã đăng ký tham dự: ${n} người</h3><div class="rs">${rs.map(r=>`<span>${esc(r.n)}${(+r.k>1)?' (+'+(r.k-1)+')':''}</span>`).join('')||'<span class="meta" style="background:none;padding:0">Chưa có ai đăng ký.</span>'}</div>
   <p class="meta">Tên đăng ký hiển thị cho mọi người trong họ.</p>
-  <div class="row"><button class="btn" id="rg">Tôi sẽ tham dự</button>${(ev.seed||!canDelUid(ev.uid))?'':'<button class="btn ghost" id="dv">Xoá sự kiện</button>'}<button class="btn ghost" id="cx">Đóng</button></div>`;
+  <div class="row"><button class="btn" id="rg">Tôi sẽ tham dự</button>${(ev.seed||!adm())?'':'<button class="btn" id="ee1">Sửa sự kiện</button>'}${(ev.seed||!canDelUid(ev.uid))?'':'<button class="btn ghost" id="dv">Xoá sự kiện</button>'}<button class="btn ghost" id="cx">Đóng</button></div>`;
   $('#ov').hidden=false;$('#cx').onclick=closeDialog;$('#rg').onclick=()=>rsvpDialog(id,occ);
+  const e1=$('#ee1');if(e1)e1.onclick=()=>addEvDialog(ev);
   const dv=$('#dv');if(dv)dv.onclick=()=>{$('#dlg').innerHTML=`<h2 id="dtitle">Xoá sự kiện này?</h2><p>Sự kiện sẽ biến mất với mọi người.</p><div class="row"><button class="btn" id="dy">Xoá</button><button class="btn ghost" id="dn">Không xoá</button></div>`;$('#dn').onclick=closeDialog;
     $('#dy').onclick=async()=>{closeDialog();state.localEv=state.localEv.filter(x=>x.id!==id);state.events=state.events.filter(x=>x.id!==id);if(DB){try{await DB.doc('events/'+id).delete()}catch(e){}}refresh()}};
 }
@@ -1596,10 +1597,10 @@ function rsvpDialog(id,occ){if(needLogin())return;
     if(DB){try{await DB.doc('rsvps/'+rid).set(o)}catch(e){state.localRs.push(Object.assign({id:rid},o));warn=true}}else state.localRs.push(Object.assign({id:rid},o));
     refresh();evDialog(id,occ);if(warn)alert_('Đăng ký hiện chỉ lưu trong tab này vì tài khoản chưa có quyền đóng góp.')}
 }
-function addEvDialog(){if(needLogin())return;
+function addEvDialog(E){if(!E&&needLogin())return;
   let name='';try{name=localStorage.getItem('gp_author')||''}catch(e){}
   $('#dlg').className='dlg wide';
-  $('#dlg').innerHTML=`<h2 id="dtitle">Thêm sự kiện</h2>
+  $('#dlg').innerHTML=`<h2 id="dtitle">${E?'Sửa sự kiện':'Thêm sự kiện'}</h2>
   <label class="f">Tên sự kiện<input type="text" id="et" maxlength="100" placeholder="Ví dụ: Họp phái 3 cuối năm"></label>
   <label class="f">Loại<select id="ek">${Object.keys(EVT).map(k=>`<option>${esc(k)}</option>`).join('')}</select></label>
   <label class="f">Cách tính ngày<select id="em"><option value="s">Dương lịch, một lần</option><option value="l">Âm lịch, lặp lại hằng năm (như ngày giỗ)</option></select></label>
@@ -1609,19 +1610,26 @@ function addEvDialog(){if(needLogin())return;
   <label class="f">Địa điểm (tuỳ chọn)<input type="text" id="epl" maxlength="120"></label>
   <label class="f">Ghi chú (tuỳ chọn)<textarea id="ent" rows="3" maxlength="600"></textarea></label>
   <label class="f">Người đăng<input type="text" id="eby" maxlength="80" value="${esc(name)}"></label>
-  <div class="err" id="ee" role="alert"></div><div class="row"><button class="btn" id="es2">Thêm vào lịch</button><button class="btn ghost" id="ex">Huỷ</button></div>`;
+  <div class="err" id="ee" role="alert"></div><div class="row"><button class="btn" id="es2">${E?'Lưu thay đổi':'Thêm vào lịch'}</button><button class="btn ghost" id="ex">Huỷ</button></div>`;
   $('#ov').hidden=false;
   const sync=()=>{const l=$('#em').value==='l';$('#es').hidden=l;$('#el').hidden=!l;$('#el').style.display=l?'grid':'none'};
   $('#em').onchange=sync;sync();
   $('#ed').oninput=()=>{const v=$('#ed').value;$('#eh').textContent=v?'Âm lịch: '+lunarTxt(v):''};
   const lh=()=>{const d=+$('#eld').value,m=+$('#elm').value;if(d>=1&&d<=30&&m>=1&&m<=12){const t=todayISO(),ev={dt:null,ld:d,lm:m},o=nextOcc(ev,t);$('#elh').textContent=o?'Lần tới: '+(()=>{const p=parts(o);return `${WD[p.wd]}, ${p.d}/${p.m}/${p.y}`})():''}else $('#elh').textContent=''};
   $('#eld').oninput=lh;$('#elm').oninput=lh;
+  if(E){$('#et').value=E.t||'';$('#ek').value=E.k||'Khác';$('#etm').value=E.tm||'';$('#epl').value=E.pl||'';$('#ent').value=E.nt||'';$('#eby').value=E.by||'';
+    if(E.dt){$('#em').value='s';$('#ed').value=E.dt;$('#ed').oninput()}else{$('#em').value='l';$('#eld').value=E.ld||'';$('#elm').value=E.lm||'';lh()}sync()}
   $('#ex').onclick=closeDialog;
   $('#es2').onclick=async()=>{
     const t=$('#et').value.trim();if(!t){$('#ee').textContent='Cần có tên sự kiện.';return}
     const o={t,k:$('#ek').value,tm:$('#etm').value.trim(),pl:$('#epl').value.trim(),nt:$('#ent').value.trim(),by:$('#eby').value.trim(),at:Date.now()};
     if($('#em').value==='l'){const d=+$('#eld').value,m=+$('#elm').value;if(!(d>=1&&d<=30&&m>=1&&m<=12)){$('#ee').textContent='Ngày và tháng âm lịch chưa đúng.';return}o.ld=d;o.lm=m}
     else{const v=$('#ed').value;if(!v){$('#ee').textContent='Hãy chọn ngày.';return}o.dt=v}
+    if(E){const q=Object.assign({},o);delete q.at;if(o.dt){q.ld=null;q.lm=null}else q.dt=null;
+      let warn=false;if(DB){try{await DB.doc('events/'+E.id).update(q)}catch(e){warn=true}}
+      if(!DB||warn){const up=a=>a.map(x=>x.id===E.id?Object.assign({},x,q):x);state.localEv=up(state.localEv);state.events=up(state.events)}
+      closeDialog();if(o.dt){const p=parts(o.dt);state.cal={y:p.y,m:p.m}}refresh();
+      if(warn)alert_('Chưa lưu được lên máy chủ (cần quyền quản trị). Thay đổi chỉ có trong tab này.');return}
     try{localStorage.setItem('gp_author',o.by)}catch(e){}
     const id='v'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);let warn=false;
     if(DB){try{await DB.doc('events/'+id).set(o)}catch(e){state.localEv.push(Object.assign({id},o));warn=true}}else state.localEv.push(Object.assign({id},o));
