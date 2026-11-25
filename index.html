@@ -108,27 +108,39 @@ ul.tree li{margin:2px 0}
 .diff div{background:var(--soft);border-radius:8px;padding:8px 10px;font-size:14px;overflow-wrap:anywhere}
 
 /* history + blog */
-.hero{background:linear-gradient(135deg,#6b1515,#8f2323);color:#fbe9c0;border-radius:14px;padding:26px 24px;margin-bottom:18px}
-.hero h2{margin:0 0 6px;font-size:24px;color:#ffe9a8}.hero p{margin:0;color:#f6dfb0;max-width:68ch}
+.hero{background:linear-gradient(135deg,var(--brand,#6b1515),var(--accent2,#8f2323));color:#fbe9c0;border-radius:14px;padding:26px 24px;margin-bottom:18px}
+.hero h2{margin:0 0 6px;font-size:24px;color:var(--gold,#ffe9a8)}.hero p{margin:0;color:#f6dfb0;max-width:68ch}
 .tl{position:relative;margin:0;padding:0 0 0 22px;list-style:none;border-left:2px solid #c9a24a}
 .tl li{position:relative;padding:0 0 20px 14px}
 .tl li::before{content:"";position:absolute;left:-30px;top:5px;width:12px;height:12px;border-radius:50%;background:#c9a24a;border:2px solid var(--bg)}
-.tl .yr{font-weight:700;color:#8f2323}[data-theme=dark] .tl .yr{color:#e8b95a}
+.tl .yr{font-weight:700;color:var(--accent2,#8f2323)}[data-theme=dark] .tl .yr{color:#e8b95a}
 .tl h3{margin:2px 0 4px;font-size:16px}.tl p{margin:0 0 4px;max-width:70ch}
 .note{background:var(--soft);border-left:3px solid #c9a24a;border-radius:6px;padding:10px 12px;font-size:13.5px;color:var(--muted);margin:12px 0}
 .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
 .gslot{border:2px dashed var(--line);border-radius:12px;background:var(--surface);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;cursor:pointer;overflow:hidden;position:relative;padding:0;color:var(--muted);font:inherit}
 .gslot:hover{border-color:#c9a24a}.gslot img{width:100%;height:100%;object-fit:cover;display:block}
 .gcap{font-size:13px;margin-top:6px;text-align:center}
-.nkind{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;background:#efe6d2;color:#5b1212}
-.nkind.fund{background:#5b1212;color:#ffe9a8}
+.nkind{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;background:#efe6d2;color:var(--brand,#5b1212)}
+.nkind.fund{background:var(--brand,#5b1212);color:var(--gold,#ffe9a8)}
 .bar{height:12px;border-radius:99px;background:#e7e2d6;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,#a32a2a,#d9a441)}
 .fundbox{border:1px solid #d9c48c;background:#fffaf0;border-radius:12px;padding:14px;margin:12px 0}
 .fundbox dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:8px 0 0}.fundbox dt{color:var(--muted)}.fundbox dd{margin:0;font-weight:600;word-break:break-word}
+.hd,.hero2{position:relative}
+#cms{position:fixed;right:14px;bottom:14px;z-index:15;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 28px);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 10px;box-shadow:0 8px 30px rgba(0,0,0,.28)}
+#cms .cmsl{font-weight:700;color:var(--accent);font-size:13px}
+body.cms-on [data-ck]{outline:2px dashed #d9a441;outline-offset:2px;cursor:text}
+body.cms-on [data-ck]:hover{background:rgba(255,233,168,.35)}
+body.cms-on img[data-ci]{outline:3px dashed #d9a441;outline-offset:-3px;cursor:pointer}
+.cms-img{position:absolute;right:12px;top:12px;z-index:5;display:none}
+body.cms-on .cms-img{display:inline-flex}
+.cms-tools{display:none;gap:6px;margin-bottom:8px;flex-wrap:wrap}body.cms-on .cms-tools{display:flex}
+.cbimg{max-width:100%;border-radius:10px;display:block;margin:6px 0}
+.fprev{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.pvimg{max-width:100%;max-height:200px;border-radius:8px;border:1px solid var(--line);display:block;margin:6px 0}
 .pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 .pcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;color:inherit}
 .pcard:hover{text-decoration:none;border-color:#c9a24a}
-.pcard .cv{aspect-ratio:16/9;background:linear-gradient(135deg,#7a1a1a,#a63a2a);color:#ffe9a8;display:flex;align-items:center;justify-content:center;font-size:30px}
+.pcard .cv{aspect-ratio:16/9;background:linear-gradient(135deg,#7a1a1a,#a63a2a);color:var(--gold,#ffe9a8);display:flex;align-items:center;justify-content:center;font-size:30px}
 .pcard .cv img{width:100%;height:100%;object-fit:cover}
 .pcard .bd{padding:12px 14px;display:grid;gap:4px}.pcard h3{margin:0;font-size:16px}
 .meta{font-size:12.5px;color:var(--muted)}
@@ -143,11 +155,11 @@ label.f{display:grid;gap:4px;font-size:13px;color:var(--muted);margin-bottom:10p
 
 /* header ảnh + trang chủ + lịch */
 header.mast{position:static}
-.hd{background:linear-gradient(90deg,rgba(70,12,12,.92),rgba(70,12,12,.78) 34%,rgba(70,12,12,.3) 56%,rgba(70,12,12,0) 72%),url(img/banner.jpg) right center/cover #5b1212;color:#fff;padding:30px 0 26px;min-height:150px;display:flex;align-items:center}
-.hd .wrap{width:100%}.hd h1{font:700 34px/1.15 var(--font-display);color:#ffe9a8;margin:2px 0 6px;text-shadow:0 1px 8px rgba(0,0,0,.4)}
-.hd-k{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#f6dfb0}.hd .sub{color:#f3e2bd;font-size:13px;max-width:60ch}
+.hd{background:linear-gradient(90deg,rgba(var(--brand-rgb,70,12,12),.92),rgba(var(--brand-rgb,70,12,12),.78) 34%,rgba(var(--brand-rgb,70,12,12),.3) 56%,rgba(var(--brand-rgb,70,12,12),0) 72%),var(--bn,url(img/banner.jpg)) right center/cover var(--brand,#5b1212);color:#fff;padding:30px 0 26px;min-height:var(--hdh,240px);display:flex;align-items:center}
+.hd .wrap{width:100%}.hd h1{font:700 var(--hdf,40px)/1.15 var(--font-display);color:var(--gold,#ffe9a8);margin:2px 0 6px;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.hd-k{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#f6dfb0}.hd .sub{color:#f3e2bd;font-size:15px;max-width:60ch}
 .navbar{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-@media(max-width:560px){.hd h1{font-size:26px}.hd{padding:20px 0 18px;min-height:130px;background:linear-gradient(90deg,rgba(70,12,12,.9),rgba(70,12,12,.62)),url(img/banner.jpg) 70% center/cover #5b1212}.hd .sub{font-size:12.5px}}
+@media(max-width:560px){.hd h1{font-size:calc(var(--hdf,40px)*.72)}.hd{padding:20px 0 18px;min-height:calc(var(--hdh,240px)*.72);background:linear-gradient(90deg,rgba(var(--brand-rgb,70,12,12),.9),rgba(var(--brand-rgb,70,12,12),.62)),var(--bn,url(img/banner.jpg)) 70% center/cover var(--brand,#5b1212)}.hd .sub{font-size:13.5px}}
 /* menu gọn trên màn hình nhỏ */
 .navtog{display:none}
 @media(max-width:760px){
@@ -163,29 +175,29 @@ header.mast{position:static}
   nav.tabs a[aria-current="page"]{border-bottom:1px solid var(--line);border-left-color:var(--accent);background:var(--soft);color:var(--accent);font-weight:700}
   .auth .who{display:none}
 }
-.hero2{position:relative;border-radius:14px;overflow:hidden;min-height:360px;background:#2a1010 url(img/cong-lang-cu.jpg) center 60%/cover;color:#fff;display:flex;align-items:flex-end;margin-bottom:16px}
-.hero2::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(60,10,10,.92) 0%,rgba(60,10,10,.55) 45%,rgba(60,10,10,.05) 100%)}
-.hero2 .in{position:relative;padding:28px;max-width:760px}.hero2 h2{font:700 30px/1.2 var(--font-display);color:#ffe9a8;margin:0 0 8px}
+.hero2{position:relative;border-radius:14px;overflow:hidden;min-height:360px;background:#2a1010 var(--hero,url(img/cong-lang-cu.jpg)) center 60%/cover;color:#fff;display:flex;align-items:flex-end;margin-bottom:16px}
+.hero2::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(var(--brand-rgb,60,10,10),.92) 0%,rgba(var(--brand-rgb,60,10,10),.55) 45%,rgba(var(--brand-rgb,60,10,10),.05) 100%)}
+.hero2 .in{position:relative;padding:28px;max-width:760px}.hero2 h2{font:700 30px/1.2 var(--font-display);color:var(--gold,#ffe9a8);margin:0 0 8px}
 .hero2 p{margin:0 0 14px;color:#fbefd0;font-size:15.5px}.hero2 .row{display:flex;gap:10px;flex-wrap:wrap}
-.btn.gold{background:#ffe9a8;color:#5b1212}.btn.line{background:transparent;color:#ffe9a8;border:1px solid #ffe9a8}
+.btn.gold{background:var(--gold,#ffe9a8);color:var(--brand,#5b1212)}.btn.line{background:transparent;color:var(--gold,#ffe9a8);border:1px solid var(--gold,#ffe9a8)}
 a.btn{display:inline-flex;align-items:center}a.btn:hover{text-decoration:none}
 .stats3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
-.stats3 div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}.stats3 b{display:block;font-size:24px;color:#8f2323}[data-theme=dark] .stats3 b{color:#e8b95a}
+.stats3 div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}.stats3 b{display:block;font-size:24px;color:var(--accent2,#8f2323)}[data-theme=dark] .stats3 b{color:#e8b95a}
 .stats3 span{font-size:13px;color:var(--muted)}
 .mason{columns:3 230px;column-gap:10px}.mason figure{margin:0 0 10px;break-inside:avoid}
 .mason img{width:100%;display:block;border-radius:10px;cursor:zoom-in;border:1px solid var(--line)}
 .mason figcaption{font-size:12.5px;color:var(--muted);padding:3px 2px 0}
 .evl{display:grid;gap:10px}.evc{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;width:100%}
-.evc:hover{border-color:#c9a24a}.evd{background:#8f2323;color:#ffe9a8;border-radius:10px;text-align:center;padding:6px 0;line-height:1.1}
+.evc:hover{border-color:#c9a24a}.evd{background:var(--accent2,#8f2323);color:var(--gold,#ffe9a8);border-radius:10px;text-align:center;padding:6px 0;line-height:1.1}
 .evd b{display:block;font-size:24px}.evd span{font-size:11.5px}
 .evc h3{margin:0 0 2px;font-size:16px;color:var(--ink)}.evc .meta{font-size:12.5px}
-.k-giỗ{background:#8f2323}
+.k-giỗ{background:var(--accent2,#8f2323)}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .cal .dh{background:var(--soft);text-align:center;font-size:12px;padding:6px 0;color:var(--muted);font-weight:600}
 .cal .dc{background:var(--surface);min-height:84px;padding:4px;display:flex;flex-direction:column;gap:2px;font-size:12px}
 .cal .dc.out{background:var(--soft);opacity:.55}.cal .dc.today{outline:2px solid #c9a24a;outline-offset:-2px}
 .cal .dn{display:flex;justify-content:space-between;align-items:baseline}.cal .dn b{font-size:14px}.cal .dn i{font-style:normal;color:var(--muted);font-size:11px}
-.cal .dn i.m1{color:#8f2323;font-weight:700}
+.cal .dn i.m1{color:var(--accent2,#8f2323);font-weight:700}
 .pill{border:0;border-radius:5px;padding:2px 5px;font-size:11.5px;color:#fff;text-align:left;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;width:100%}
 @media(max-width:640px){.cal .dc{min-height:58px}.pill{font-size:10px;padding:1px 3px}.cal .dn i{display:none}}
 .calbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}.calbar h2{margin:0;flex:1;min-width:140px}
@@ -197,20 +209,39 @@ a.btn{display:inline-flex;align-items:center}a.btn:hover{text-decoration:none}
 .tabs a[hidden]{display:none!important}
 footer{border-top:1px solid var(--line);padding:16px 0 30px;color:var(--muted);font-size:12px}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* trang trí do quản trị viên chọn */
+.card,.pcard,.hero,.hero2,.evc,.fundbox{border-radius:var(--rad,12px)}
+body.pat-dots{background-image:radial-gradient(rgba(0,0,0,.07) 1px,transparent 1.6px);background-size:16px 16px}
+body.pat-lines{background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.03) 0 2px,transparent 2px 14px)}
+body.pat-lattice{background-image:linear-gradient(rgba(0,0,0,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.045) 1px,transparent 1px);background-size:28px 28px}
+body.has-pbg{background-image:var(--pbg);background-size:cover;background-attachment:fixed;background-position:center}
+body.hdbar .hd{border-bottom:6px solid var(--gold,#ffe9a8)}
+body.hdbar .hero2{border:3px solid var(--gold,#ffe9a8)}
+#notice{background:var(--gold,#ffe9a8);color:var(--brand,#5b1212);text-align:center;font-weight:600;font-size:14px;padding:8px 14px}
+#fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+#fx span{position:absolute;top:-8%;opacity:.85;animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){#fx{display:none}}
+.swatches{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+.swatch{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;background:var(--surface);color:var(--ink);cursor:pointer;font:inherit;font-size:13px}
+.swatch i{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.2)}
+.dlg.wide{max-height:92vh;overflow:auto}
+.crow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.crow input[type=color]{width:100%;height:40px;padding:2px}
 </style>
 </head>
 <body>
 <header class="mast">
-  <div class="hd"><div class="wrap"><div class="hd-k">Họ Nguyễn Đặng · làng Cổ Lũy</div><h1>Gia phả họ Đặng</h1><div class="sub">Phái 3 · làng Cổ Lũy, xã Hải Ba, huyện Hải Lăng, Quảng Trị · bản gốc hoàn thành 06/11/2008</div></div></div>
+  <div class="hd" data-cimgbox="banner" data-lab="ảnh header (banner)"><div class="wrap"><div class="hd-k" data-ck="hd-k">Họ Nguyễn Đặng · làng Cổ Lũy</div><h1 data-ck="hd-h">Gia phả họ Đặng</h1><div class="sub" data-ck="hd-s">Phái 3 · làng Cổ Lũy, xã Hải Ba, huyện Hải Lăng, Quảng Trị · bản gốc hoàn thành 06/11/2008</div></div></div>
   <div class="navbar"><div class="wrap nvw">
     <button type="button" class="navtog" id="navtog" aria-expanded="false" aria-controls="tabs"><span class="bars" aria-hidden="true"></span><span class="cur" id="navcur">Menu</span><span class="car" aria-hidden="true">▾</span></button>
     <nav class="tabs" id="tabs" aria-label="Các mục">
-      <a href="#trang-chu" data-t="trang-chu">Trang chủ</a>
-      <a href="#lich" data-t="lich">Lịch sự kiện</a>
-      <a href="#tra-cuu" data-t="tra-cuu">Tra cứu</a>
-      <a href="#pha-do-tranh" data-t="pha-do-tranh">Phả đồ treo tường</a>
-      <a href="#tin-tuc" data-t="tin-tuc">Tin tức họ</a>
-      <a href="#blog" data-t="blog">Blog dòng họ</a>
+      <a href="#trang-chu" data-t="trang-chu"><span data-ck="nav-trang-chu">Trang chủ</span></a>
+      <a href="#lich" data-t="lich"><span data-ck="nav-lich">Lịch sự kiện</span></a>
+      <a href="#tra-cuu" data-t="tra-cuu"><span data-ck="nav-tra-cuu">Tra cứu</span></a>
+      <a href="#pha-do-tranh" data-t="pha-do-tranh"><span data-ck="nav-pha-do-tranh">Phả đồ treo tường</span></a>
+      <a href="#tin-tuc" data-t="tin-tuc"><span data-ck="nav-tin-tuc">Tin tức họ</span></a>
+      <a href="#blog" data-t="blog"><span data-ck="nav-blog">Blog dòng họ</span></a>
       <a href="#duyet" data-t="duyet" id="tabduyet">Duyệt cập nhật <span class="chip" id="pcount" hidden></span></a>
     </nav>
     <div class="auth" id="auth"></div>
@@ -220,7 +251,7 @@ footer{border-top:1px solid var(--line);padding:16px 0 30px;color:var(--muted);f
   <div class="banner" id="mode"></div>
   <div id="view"></div>
 </div></main>
-<footer><div class="wrap">Dữ liệu lấy từ gia phả phái 3 họ Nguyễn Đặng (bản 2008), đời 9 đến đời 17. Năm sinh ước tính theo đời chỉ mang tính tham khảo.</div></footer>
+<footer><div class="wrap" data-ck="ft">Dữ liệu lấy từ gia phả phái 3 họ Nguyễn Đặng (bản 2008), đời 9 đến đời 17. Năm sinh ước tính theo đời chỉ mang tính tham khảo.</div></footer>
 
 <div class="ov" id="ov" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dtitle" id="dlg"></div></div>
 
@@ -287,7 +318,9 @@ function parentCon(p){
     if(q.r==='C')return q.i;if(partnerOf.has(q.i))return partnerOf.get(q.i)}
   return null}
 /* dựng lại cây quan hệ từ dữ liệu gốc + phần đã được duyệt (người mới, cha mẹ mới) */
+const HIDSTASH=[];   /* [vị trí, hồ sơ gốc] các hồ sơ đã gộp (ẩn), khôi phục được */
 function buildIndex(){
+  while(HIDSTASH.length){const h=HIDSTASH.shift();DATA.splice(h[0],0,h[1])}
   DATA.length=BASE_N;
   const seen=new Set(DATA.map(p=>p.i));
   state.extra.slice().sort((a,b)=>a.i-b.i).forEach(x=>{if(seen.has(x.i))return;seen.add(x.i);DATA.push(x)});
@@ -296,6 +329,7 @@ function buildIndex(){
     Object.assign(p,p._o);const b=BASE_REL[p.i];p.s=b?b.s.slice():[];
     const o=state.overrides[pid(p.i)];
     if(o){if(o.n)p.n=o.n;['y','f','m','fn','mn','sp'].forEach(k=>{if(k in o)p[k]=o[k]||null});if(o.r)p.r=o.r;if(o.d)p.d=o.d}});
+  for(let k=DATA.length-1;k>=0;k--){const o=state.overrides[pid(DATA[k].i)];if(o&&o.hid){const r=DATA.splice(k,1)[0];if(k<BASE_N)HIDSTASH.unshift([k,r])}}
   byid.clear();DATA.forEach(p=>byid.set(p.i,p));
   DATA.forEach(x=>{if(x.sp&&byid.get(x.sp))byid.get(x.sp).s.push(x.i)});
   partnerOf.clear();kidsOf.clear();
@@ -339,7 +373,7 @@ function refresh(){
   if(h==='duyet')renderAdmin();else if(h.startsWith('ho-so-'))renderProfile(+h.slice(6),true);
   else if(h==='lich')renderCal();else if(h==='blog')renderBlog();else if(h.startsWith('bai-viet-'))renderPost(h.slice(9));
   else if(h==='tin-tuc')renderNews();else if(h.startsWith('tin-tuc-'))renderNewsItem(h.slice(8));else if(h==='pha-do-tranh')paintPoster();else if(h==='tra-cuu')renderResults();else if(h==='trang-chu'||h==='lich-su'||h==='')renderHome();
-  modeBanner();
+  modeBanner();applySite();
 }
 function modeBanner(){
   $('#mode').innerHTML=state.mode!=='db'
@@ -429,7 +463,7 @@ function renderProfile(id,soft){
       ${kids.length?`<div><span class="muted">Con (${kids.length}): </span>${kids.map(k=>link(k)+' <span class="small muted">('+(isF(k)?'con gái':'con trai')+')</span>').join(', ')}</div>`:(p0.r==='C'?'<div class="muted">Chưa có thông tin về con trong bảng.</div>':'')}
     </div>
     <div class="row" style="margin-top:12px"><button class="btn ghost sm" data-rel="addchild">＋ Thêm con</button>${p0.r==='C'?'<button class="btn ghost sm" data-rel="addspouse">＋ Thêm vợ hoặc chồng</button>':''}${(p0.r==='C'&&(!father||!mother))?`<button class="btn ghost sm" data-rel="setparent">${!father&&!mother?'Gắn cha hoặc mẹ':!father?'Bổ sung cha':'Bổ sung mẹ'}</button>`:''}</div>
-    ${adm()?`<div class="row" style="margin-top:8px"><span class="small muted">Quản trị:</span><button class="btn sm" data-adm="edit">Sửa thông tin</button><button class="btn ghost sm" data-adm="vt">Thêm vai trò</button>${(p0.r==='C'&&(father||mother))?'<button class="btn ghost sm" data-rel="setparent">Đổi cha hoặc mẹ</button>':''}${father?'<button class="btn ghost sm" data-adm="rmf">Gỡ cha</button>':''}${(!father&&p0.r==='C'&&fatherKey(p0))?`<button class="btn sm" data-adm="mkf">Tạo hồ sơ cha: ${esc(fatherName(p0))}</button>`:''}${mother?'<button class="btn ghost sm" data-adm="rmm">Gỡ mẹ</button>':''}${(state.overrides[pid(p0.i)]||{}).sp?'<button class="btn ghost sm" data-adm="unsp">Gỡ nối vợ/chồng (trả về như dữ liệu gốc)</button>':''}${p0.added?'<button class="btn ghost sm" data-adm="del">Xoá người này</button>':''}</div>`:''}
+    ${adm()?`<div class="row" style="margin-top:8px"><span class="small muted">Quản trị:</span><button class="btn sm" data-adm="edit">Sửa thông tin</button><button class="btn ghost sm" data-adm="vt">Thêm vai trò</button>${(p0.r==='C'&&(father||mother))?'<button class="btn ghost sm" data-rel="setparent">Đổi cha hoặc mẹ</button>':''}${father?'<button class="btn ghost sm" data-adm="rmf">Gỡ cha</button>':''}${(!father&&p0.r==='C'&&fatherKey(p0))?`<button class="btn sm" data-adm="mkf">Tạo hồ sơ cha: ${esc(fatherName(p0))}</button>`:''}${mother?'<button class="btn ghost sm" data-adm="rmm">Gỡ mẹ</button>':''}${(state.overrides[pid(p0.i)]||{}).sp?'<button class="btn ghost sm" data-adm="unsp">Gỡ nối vợ/chồng (trả về như dữ liệu gốc)</button>':''}<button class="btn ghost sm" data-adm="merge">Gộp hồ sơ trùng</button>${p0.added?'<button class="btn ghost sm" data-adm="del">Xoá người này</button>':''}</div>`:''}
     ${pend.filter(r=>String(r.field).startsWith('@')).length?`<p class="small" style="margin:8px 0 0"><span class="pend">${pend.filter(r=>String(r.field).startsWith('@')).length} đề nghị về quan hệ đang chờ duyệt</span></p>`:''}</div>
     ${p0.dq?`<div class="card small"><h3>Lưu ý về dữ liệu</h3>${esc(p0.dq)}</div>`:''}
     <div class="card small muted">${p0.added?'Nguồn: do con cháu bổ sung và đã được ban biên soạn duyệt.':'Nguồn: gia phả phái 3 (bản 2008), bảng số '+p0.b+'.'} ${miss.length?`Còn ${miss.length} mục cần thu thập.`:'Hồ sơ đã đủ các mục theo dõi.'}</div>
@@ -681,6 +715,7 @@ async function admAct(kind,id){
     else if(kind==='mkf')makeFatherDialog(P);
     else if(kind.startsWith('vtdel-')){const i=+kind.slice(6);await saveOv(P,{vt:vtOf(P.i).filter((e,k)=>k!==i)});refresh()}
     else if(kind==='del')delMemberDialog(P);
+    else if(kind==='merge')mergeDialog(P);
   }catch(e){alert_('Không ghi được vào kho chung. Hãy thử lại.')}}
 /* ---------- tạo hồ sơ cho người chỉ được ghi tên, và thêm thành viên mới ---------- */
 const fatherName=p=>titleVN(String(p.fn||'').replace(/\s+và\s+.*$/i,'').trim());
@@ -824,6 +859,53 @@ function delMemberDialog(P){
   $('#ov').hidden=false;$('#dn').onclick=closeDialog;
   $('#dy').onclick=async()=>{try{if(DB)await DB.doc('newmembers/m'+P.i).delete();
       state.extra=state.extra.filter(x=>x.i!==P.i);closeDialog();location.hash='#tra-cuu';refresh()}catch(e){alert_('Không xoá được. Hãy thử lại.')}}}
+
+
+/* ---------- gộp hồ sơ trùng ---------- */
+function mergeDialog(P){
+  const d=$('#dlg');d.className='dlg wide';
+  d.innerHTML=`<h2 id="dtitle">Gộp hồ sơ trùng: ${esc(nm(P))}</h2>
+  <p>Hồ sơ này (số ${P.i}) sẽ được ${P.added?'xoá':'ẩn khỏi phả hệ'}. Con cái${P.r==='C'?', vợ hoặc chồng':''} đang gắn với hồ sơ này sẽ chuyển sang hồ sơ bạn chọn giữ lại.</p>
+  <label class="f">Tìm hồ sơ giữ lại (gõ tên)<input type="text" id="mq" autocomplete="off"></label>
+  <div id="mh" class="stack"></div><div id="mp" class="small"></div>
+  <label class="f" style="display:flex;flex-direction:row;gap:8px;align-items:center"><input type="checkbox" id="mc" checked> Chép sang hồ sơ giữ lại những thông tin nó còn thiếu (ngày sinh, ngày mất, nơi sinh...)</label>
+  <div class="err" id="me" role="alert"></div>
+  <div class="row"><button class="btn" id="my" disabled style="background:#a3271f">Gộp</button><button class="btn ghost" id="mx">Huỷ</button></div>`;
+  $('#ov').hidden=false;$('#mx').onclick=()=>{d.className='dlg';closeDialog()};
+  const sel=()=>{const r=document.querySelector('input[name=mt]:checked');return r?byid.get(+r.value):null};
+  const kidsP=()=>DATA.filter(x=>x.f===P.i||x.m===P.i);
+  const check=T=>{
+    if(!T)return'';
+    if(T.i===P.i)return'Không thể gộp một hồ sơ vào chính nó.';
+    if(T.r!==P.r)return'Hai hồ sơ phải cùng loại (cùng là người trong họ, hoặc cùng là dâu, rể).';
+    if((P.s||[]).includes(T.i)||(T.s||[]).includes(P.i))return'Hai người này là vợ chồng của nhau, không phải hồ sơ trùng.';
+    let cur=T,g=0;while(cur&&g++<80){if(cur.i===P.i)return'Hồ sơ giữ lại đang là con cháu của hồ sơ bị gộp, gộp sẽ làm cây phả hệ bị vòng.';cur=byid.get(parentCon(cur))}
+    return''};
+  const upd=()=>{const T=sel();const err=check(T);$('#me').textContent=err;$('#my').disabled=!T||!!err;
+    $('#mp').innerHTML=T&&!err?`Sẽ chuyển <b>${kidsP().length}</b> người con${P.r==='C'?` và <b>${(P.s||[]).length}</b> vợ hoặc chồng`:''} sang <b>${esc(nm(T))}</b> (số ${T.i}).`:''};
+  $('#mq').oninput=()=>{const q=fold($('#mq').value.trim());
+    const hits=q.length<2?[]:DATA.filter(x=>x.i!==P.i&&x.r===P.r&&fold(clean(x.n)).includes(q)).slice(0,10);
+    $('#mh').innerHTML=hits.map(x=>{const f=byid.get(x.f);return `<label style="display:flex;gap:8px;align-items:flex-start"><input type="radio" name="mt" value="${x.i}"><span>${esc(nm(x))} · đời ${x.d} · số ${x.i}${f?' · con '+esc(nm(f)):(x.fn?' · cha: '+esc(x.fn):'')}</span></label>`}).join('')||(q.length>=2?'<p class="small">Không thấy hồ sơ nào cùng loại.</p>':'');
+    $('#mh').querySelectorAll('input').forEach(i=>i.onchange=upd);upd()};
+  $('#my').onclick=async()=>{const T=sel();if(!T||check(T))return;$('#my').disabled=true;
+    try{
+      for(const x of kidsP()){const pt={};if(x.f===P.i)pt.f=T.i;if(x.m===P.i)pt.m=T.i;await saveOv(x,pt)}
+      if(P.r==='C')for(const sid of (P.s||[]).slice()){const S=byid.get(sid);if(S)await saveOv(S,{sp:T.i})}
+      if($('#mc').checked){const pt={};FIELDS.forEach(f=>{const a=val(T,f.k),b=val(P,f.k);if(!a&&b)pt[f.k]=b});if(Object.keys(pt).length)await saveOv(T,pt)}
+      if(P.added){if(DB)await DB.doc('newmembers/m'+P.i).delete();state.extra=state.extra.filter(x=>x.i!==P.i)}
+      else await saveOv(P,{hid:1});
+      d.className='dlg';closeDialog();refresh();location.hash='#ho-so-'+T.i;
+    }catch(e){$('#my').disabled=false;$('#me').textContent='Không ghi được vào kho chung. Hãy thử lại; một phần có thể đã được chuyển, mở lại hồ sơ để kiểm tra.'}};
+}
+function hidPanel(){
+  if(!adm()||!HIDSTASH.length||!$('#view'))return;
+  const div=document.createElement('div');div.className='card';div.style.marginTop='16px';
+  div.innerHTML=`<h2 style="margin-top:0">Hồ sơ đã gộp (đang ẩn)</h2><p class="small">Con cái và vợ chồng đã chuyển sang hồ sơ giữ lại sẽ không tự chuyển về khi khôi phục.</p>`+HIDSTASH.map(h=>`<div class="row" style="align-items:center;margin:4px 0"><span>${esc(nm(h[1]))} · đời ${h[1].d} · số ${h[1].i}</span><button class="btn ghost sm" data-unhide="${h[1].i}">Khôi phục</button></div>`).join('');
+  $('#view').appendChild(div);
+  div.querySelectorAll('[data-unhide]').forEach(b=>b.onclick=async()=>{const h=HIDSTASH.find(x=>x[1].i===+b.dataset.unhide);if(!h)return;
+    try{await saveOv(h[1],{hid:0});refresh()}catch(e){alert_('Không ghi được vào kho chung.')}});
+}
+{const _ra0=renderAdmin;renderAdmin=function(){_ra0();hidPanel()}}
 
 /* update dialog */
 function openDialog(id,field){if(needLogin())return;
@@ -1018,7 +1100,7 @@ function loginDialog(msg){
 }
 
 /* ---- trang riêng tư: màn hình chờ, nạp dữ liệu gốc, quản lý tài khoản ---- */
-function setBase(arr){DATA.length=0;arr.forEach(p=>DATA.push(p));BASE_N=DATA.length;Object.keys(BASE_REL).forEach(k=>delete BASE_REL[k]);DATA.forEach(p=>{BASE_REL[p.i]={f:p.f,m:p.m,s:(p.s||[]).slice()}})}
+function setBase(arr){HIDSTASH.length=0;DATA.length=0;arr.forEach(p=>DATA.push(p));BASE_N=DATA.length;Object.keys(BASE_REL).forEach(k=>delete BASE_REL[k]);DATA.forEach(p=>{BASE_REL[p.i]={f:p.f,m:p.m,s:(p.s||[]).slice()}})}
 const PUB_TABS=['trang-chu','lich','blog','tin-tuc'];
 function isPub(h){return h===''||h==='lich-su'||PUB_TABS.includes(h)||h.startsWith('bai-viet-')||h.startsWith('tin-tuc-')}
 function gateView(){
@@ -1051,8 +1133,8 @@ function exportCsv(){
 function exportJson(withPhotos){
   const strip=(k,v)=>k==='_o'?undefined:v;
   const out={xuatLuc:new Date().toISOString(),ghiChu:'Sao lưu gia phả họ Đặng. members là danh sách đã gồm mọi chỉnh sửa; baseMembers là dữ liệu gốc; overrides, newMembers là phần được duyệt thêm.',
-    members:DATA,overrides:state.overrides,newMembers:state.extra,posts:state.posts||[],news:state.news||[],events:state.events||[],rsvps:state.rsvps||[],requests:state.requests||[],users:state.users||[]};
-  if(withPhotos){out.photos={persons:state.ph,gallery:state.gal}}
+    members:DATA,overrides:state.overrides,newMembers:state.extra,posts:state.posts||[],news:state.news||[],site:state.site||{},events:state.events||[],rsvps:state.rsvps||[],requests:state.requests||[],users:state.users||[]};
+  if(withPhotos){out.photos={persons:state.ph,gallery:state.gal,siteImages:state.siteImg}}
   dlFile('gia-pha-sao-luu-'+todayStr()+'.json','application/json;charset=utf-8',JSON.stringify(out,strip,1))}
 function adminPanels(){
   const v=$('#view');const us=state.users||[];
@@ -1114,6 +1196,8 @@ async function initDb(){
     /* công khai: blog, lịch sự kiện, đăng ký tham dự, ảnh tư liệu (không cần đăng nhập) */
     sub(col('posts'),L=>{state.posts=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
     sub(col('news'),L=>{state.news=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
+    sub(col('site'),L=>{const c=L.find(x=>x.id==='config');state.site=normSite(c&&c.v);applySite();refresh()});
+    sub(col('siteimg'),L=>{state.siteImg={};L.forEach(x=>{if(x.v&&x.v.d)state.siteImg[x.id]=x.v.d});applySite();refresh()});
     sub(col('events'),L=>{state.events=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
     sub(col('rsvps'),L=>{state.rsvps=L.map(x=>Object.assign({id:x.id},x.v));refresh()});
     sub(col('gallery'),L=>{state.gal={};state.galUid={};L.forEach(x=>{if(x.v&&x.v.d){state.gal[x.id]=x.v.d;state.galUid[x.id]=x.v.uid}});mergePhotos();refresh()});
@@ -1190,7 +1274,7 @@ function fdate(t){try{return new Date(t).toLocaleDateString('vi-VN')}catch(e){re
 function excerpt(b){const x=String(b||'').replace(/\s+/g,' ').trim();return x.length>130?x.slice(0,129)+'…':x}
 function renderBlog(){
   const list=allPosts();
-  $('#view').innerHTML=`<section class="hero"><h2>Blog dòng họ Nguyễn Đặng</h2><p>Nơi con cháu chia sẻ những bài viết, kỷ niệm và hình ảnh về dòng họ, về làng Cổ Lũy và những người đã đi trước.</p><p style="margin-top:12px"><button class="btn" id="newpost" style="background:#ffe9a8;color:#5b1212">Viết bài mới</button></p></section>
+  $('#view').innerHTML=`<section class="hero"><h2 data-ck="blog-h">Blog dòng họ Nguyễn Đặng</h2><p data-ck="blog-p">Nơi con cháu chia sẻ những bài viết, kỷ niệm và hình ảnh về dòng họ, về làng Cổ Lũy và những người đã đi trước.</p><p style="margin-top:12px"><button class="btn" id="newpost" style="background:var(--gold,#ffe9a8);color:var(--brand,#5b1212)">Viết bài mới</button></p></section>
   <div class="pcards">${list.map(p=>`<a class="pcard" href="#bai-viet-${esc(p.id)}"><div class="cv">${p.im&&p.im[0]?`<img src="${p.im[0]}" alt="">`:'✎'}</div><div class="bd"><span class="tag" style="justify-self:start">${esc(p.c||'Khác')}</span><h3>${esc(p.t)}</h3><div class="meta">${esc(p.a||'Ẩn danh')} · ${fdate(p.at)}</div><div>${esc(excerpt(p.b))}</div></div></a>`).join('')}</div>`;
   $('#newpost').onclick=postDialog;
 }
@@ -1252,7 +1336,7 @@ function fundHtml(p){
    <dl>${p.dl?`<dt>Hạn đóng góp</dt><dd>${esc(p.dl)}</dd>`:''}${p.bk?`<dt>Ngân hàng</dt><dd>${esc(p.bk)}</dd>`:''}${p.ac?`<dt>Số tài khoản</dt><dd>${esc(p.ac)}</dd>`:''}${p.an?`<dt>Chủ tài khoản</dt><dd>${esc(p.an)}</dd>`:''}${p.nt?`<dt>Nội dung chuyển</dt><dd>${esc(p.nt)}</dd>`:''}${p.ct?`<dt>Liên hệ</dt><dd>${esc(p.ct)}</dd>`:''}</dl></div>`}
 function renderNews(){
   const list=allNews();
-  $('#view').innerHTML=`<section class="hero"><h2>Tin tức họ Nguyễn Đặng</h2><p>Thông báo của ban quản trị, tin họ tộc và các đợt kêu gọi đóng quỹ.</p>${adm()?'<p style="margin-top:12px"><button class="btn" id="newnews" style="background:#ffe9a8;color:#5b1212">Đăng tin mới</button></p>':''}</section>
+  $('#view').innerHTML=`<section class="hero"><h2 data-ck="news-h">Tin tức họ Nguyễn Đặng</h2><p data-ck="news-p">Thông báo của ban quản trị, tin họ tộc và các đợt kêu gọi đóng quỹ.</p>${adm()?'<p style="margin-top:12px"><button class="btn" id="newnews" style="background:var(--gold,#ffe9a8);color:var(--brand,#5b1212)">Đăng tin mới</button></p>':''}</section>
   ${list.length?`<div class="pcards">${list.map(p=>`<a class="pcard" href="#tin-tuc-${esc(p.id)}"><div class="cv">${p.im&&p.im[0]?`<img src="${p.im[0]}" alt="">`:(p.k==='Kêu gọi đóng quỹ'?'❀':'✎')}</div><div class="bd"><span class="nkind${p.k==='Kêu gọi đóng quỹ'?' fund':''}" style="justify-self:start">${esc(p.k||'Thông báo')}</span><h3>${esc(p.t)}</h3><p class="small">${esc(excerpt(p.b))}</p><div class="meta">${fdate(p.at)}</div></div></a>`).join('')}</div>`:'<p class="small">Chưa có tin nào.</p>'}`;
   const b=$('#newnews');if(b)b.onclick=()=>newsDialog();
 }
@@ -1346,30 +1430,31 @@ function lightbox(src,cap){$('#dlg').className='dlg wide';$('#dlg').innerHTML=`<
 function renderHome(){
   const ups=upcoming().slice(0,3);
   $('#view').innerHTML=`
-  <section class="hero2"><div class="in"><h2>Họ Nguyễn Đặng, làng Cổ Lũy</h2>
-   <p>Một trong những họ lớn của làng Cổ Lũy, xã Hải Ba, huyện Hải Lăng, Quảng Trị. Nơi con cháu tìm lại cội nguồn, cập nhật gia phả, xem lịch kỵ giỗ họp họ và chia sẻ những câu chuyện của dòng họ.</p>
+  <section class="hero2" data-cimgbox="hero" data-lab="ảnh nền trang chủ"><div class="in"><h2 data-ck="hero-h">Họ Nguyễn Đặng, làng Cổ Lũy</h2>
+   <p data-ck="hero-p">Một trong những họ lớn của làng Cổ Lũy, xã Hải Ba, huyện Hải Lăng, Quảng Trị. Nơi con cháu tìm lại cội nguồn, cập nhật gia phả, xem lịch kỵ giỗ họp họ và chia sẻ những câu chuyện của dòng họ.</p>
    <div class="row"><a class="btn gold" href="#tra-cuu">Tra cứu gia phả</a><a class="btn line" href="#lich">Lịch sự kiện của họ</a><a class="btn line" href="#blog">Đọc blog dòng họ</a></div></div></section>
-  <div class="stats3"><div><b>${DATA.length||"…"}</b><span>thành viên đã nhập (đời 9 đến 17)</span></div><div><b>16</b><span>đời kể từ Nhất Thế Tổ</span></div><div><b>4</b><span>nhánh từ cụ Nguyễn Đình Thăng</span></div><div><b>2</b><span>ngày giỗ lớn mỗi năm</span></div></div>
-  <div class="card" style="margin-bottom:16px"><div class="calbar"><h2>Sắp tới trong họ</h2><a class="btn ghost sm" href="#lich">Xem cả lịch</a></div>
+  <div class="stats3"><div><b>${DATA.length||"…"}</b><span data-ck="st1">thành viên đã nhập (đời 9 đến 17)</span></div><div><b data-ck="sn2">16</b><span data-ck="st2">đời kể từ Nhất Thế Tổ</span></div><div><b data-ck="sn3">4</b><span data-ck="st3">nhánh từ cụ Nguyễn Đình Thăng</span></div><div><b data-ck="sn4">2</b><span data-ck="st4">ngày giỗ lớn mỗi năm</span></div></div>
+  <div class="card" style="margin-bottom:16px"><div class="calbar"><h2 data-ck="up-h">Sắp tới trong họ</h2><a class="btn ghost sm" href="#lich">Xem cả lịch</a></div>
    <div class="evl">${ups.map(u=>evCard(u.ev,u.occ)).join('')||'<p class="meta">Chưa có sự kiện nào.</p>'}</div></div>
-  <section class="hero" style="margin-top:0"><h2>Lịch sử họ Nguyễn Đặng</h2>
-   <p>Tóm lược từ bản “Những sự tích của họ Nguyễn Đặng” (Nguyễn Đặng Vọng, 1973) và gia phả phái 3 (2008).</p></section>
-  <div class="card" style="margin-bottom:16px"><ol class="tl">${HIST.map(x=>`<li><div class="yr">${esc(x.y)}</div><h3>${esc(x.t)}</h3><p>${esc(x.b)}</p></li>`).join('')}</ol></div>
-  <div class="card" style="margin-bottom:16px"><h2 style="margin-top:0">Hai ngày giỗ lớn và các nhánh</h2>
+  <section class="hero" style="margin-top:0"><h2 data-ck="hist-h">Lịch sử họ Nguyễn Đặng</h2>
+   <p data-ck="hist-p">Tóm lược từ bản “Những sự tích của họ Nguyễn Đặng” (Nguyễn Đặng Vọng, 1973) và gia phả phái 3 (2008).</p></section>
+  <div class="card" style="margin-bottom:16px"><ol class="tl">${HIST.map((x,n)=>`<li><div class="yr" data-ck="hy${n}">${esc(x.y)}</div><h3 data-ck="ht${n}">${esc(x.t)}</h3><p data-ck="hb${n}">${esc(x.b)}</p></li>`).join('')}</ol></div>
+  ${siteBlocksHtml()}
+  <div class="card" style="margin-bottom:16px"><h2 style="margin-top:0" data-ck="c2-h">Hai ngày giỗ lớn và các nhánh</h2>
    <p>Mỗi năm họ có hai ngày giỗ lớn: <b>07 tháng 11</b> (ngày mất của Nhất Thế Tổ) và <b>rằm tháng 7</b> (ngày mất của Thượng Đại Thỉ Tổ), cả hai tính theo âm lịch. Cả hai đã có sẵn trong <a href="#lich">lịch sự kiện</a>.</p>
    <p>Từ cụ Nguyễn Đình Thăng (đời 8), phái 3 chia thành các nhánh <a href="#pha-do-tranh">Nguyễn Hữu Triển, Nguyễn Hữu Hài, Nguyễn Đình Chư và Nguyễn Đình Ngữ</a>. Gia phả phái 3 ghi từ đời 9 đến đời 17.</p>
    <div class="note"><b>Cần đọc kỹ.</b> Phần nguồn gốc ở Nam Kinh (Trung Hoa) và mốc năm 1570 là suy luận của ông Nguyễn Đặng Vọng dựa trên truyền ngôn và sử liệu. Chính ông ghi rằng không tìm thấy tên cụ Đặng Linh trong Minh sử. Ông tính 25 năm mỗi đời, trong khi bảng ước tính năm của trang này dùng 29 năm mỗi đời nên hai cách ra con số hơi khác nhau. Mọi mốc năm trước 1800 chỉ nên xem là ước chừng.</div></div>
-  <div class="card" style="margin-bottom:16px"><h2 style="margin-top:0">Làng Cổ Lũy qua ảnh</h2>
-   <div class="mason">${GAL.map(([f,c])=>`<figure><img src="img/${f}.jpg" alt="${esc(c)}" loading="lazy" data-lb="${f}"><figcaption>${esc(c)}</figcaption></figure>`).join('')}</div></div>
-  <div class="card" style="margin-bottom:16px"><h2 style="margin-top:0">Cổ Lũy trên bản đồ xưa</h2>
-   <figure style="margin:0"><img src="img/ban-do.jpg" alt="Bản đồ tỉnh Quảng Trị thời Pháp thuộc" loading="lazy" data-lb="ban-do" style="width:100%;border-radius:10px;cursor:zoom-in;border:1px solid var(--line)"><figcaption class="meta" style="margin-top:6px">Bản đồ tỉnh Quảng Trị thời Pháp thuộc (tỷ lệ 1:500.000), có ghi địa danh Cổ Lũy ở vùng đồng bằng ven biển. Bấm vào ảnh để xem lớn.</figcaption></figure></div>
-  <div class="card"><h2 style="margin-top:0">Hình ảnh tư liệu của họ</h2>
-   <p class="meta">Bấm vào ô để thêm ảnh nhà thờ, mộ phần, sắc phong, gia phả cũ hoặc ảnh lễ giỗ. Bấm lại để đổi hoặc xoá.</p>
+  <div class="card" style="margin-bottom:16px"><h2 style="margin-top:0" data-ck="gal-h">Làng Cổ Lũy qua ảnh</h2>
+   <div class="mason">${GAL.map(([f,c])=>`<figure><img src="img/${f}.jpg" alt="${esc(c)}" loading="lazy" data-lb="${f}" data-ci="${f}"><figcaption data-ck="gc-${f}">${esc(c)}</figcaption></figure>`).join('')}</div></div>
+  <div class="card" style="margin-bottom:16px"><h2 style="margin-top:0" data-ck="map-h">Cổ Lũy trên bản đồ xưa</h2>
+   <figure style="margin:0"><img src="img/ban-do.jpg" alt="Bản đồ tỉnh Quảng Trị thời Pháp thuộc" loading="lazy" data-lb="ban-do" data-ci="ban-do" style="width:100%;border-radius:10px;cursor:zoom-in;border:1px solid var(--line)"><figcaption class="meta" style="margin-top:6px">Bản đồ tỉnh Quảng Trị thời Pháp thuộc (tỷ lệ 1:500.000), có ghi địa danh Cổ Lũy ở vùng đồng bằng ven biển. Bấm vào ảnh để xem lớn.</figcaption></figure></div>
+  <div class="card"><h2 style="margin-top:0" data-ck="doc-h">Hình ảnh tư liệu của họ</h2>
+   <p class="meta" data-ck="doc-p">Bấm vào ô để thêm ảnh nhà thờ, mộ phần, sắc phong, gia phả cũ hoặc ảnh lễ giỗ. Bấm lại để đổi hoặc xoá.</p>
    <div class="gal">${HPH.map(([i,l])=>gslot(i,l)).join('')}</div></div>
   <p class="meta" style="margin-top:12px">Nguồn: “Những sự tích của họ Nguyễn Đặng” (Nguyễn Đặng Vọng, 1973) và Gia phả phái 3 họ Nguyễn Đặng (2008).</p>`;
   const v=$('#view');
   v.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>gDialog(b.dataset.g,b.getAttribute('aria-label')));
-  v.querySelectorAll('[data-lb]').forEach(i=>i.onclick=()=>lightbox('img/'+i.dataset.lb+'.jpg',i.alt));
+  v.querySelectorAll('[data-lb]').forEach(i=>i.onclick=()=>lightbox(siteImg(i.dataset.lb)||'img/'+i.dataset.lb+'.jpg',i.alt));
   bindEv(v);
 }
 
@@ -1410,7 +1495,7 @@ function renderCal(){
     cells+=`<div class="dc${iso===t?' today':''}"><div class="dn"><b>${d}</b><i class="${l[0]===1?'m1':''}">${l[0]===1?l[0]+'/'+l[1]:l[0]}</i></div>${evs.map(e=>`<button class="pill" style="background:${EVT[e.k]||'#8f2323'}" data-ev="${esc(e.id)}" data-oc="${iso}">${esc(e.t)}</button>`).join('')}</div>`}
   const ups=upcoming();
   $('#view').innerHTML=`<section class="hero"><h2>Lịch sự kiện của họ</h2><p>Kỵ giỗ họ, tạ lăng, họp phái, họp họ và các dịp chung của dòng họ. Ai cũng có thể thêm sự kiện và đăng ký tham dự để cả nhà tiện sắp xếp. Ngày nhỏ ở góc ô là ngày âm lịch.</p>
-   <p style="margin-top:12px"><button class="btn gold" id="addev" style="background:#ffe9a8;color:#5b1212">Thêm sự kiện</button></p></section>
+   <p style="margin-top:12px"><button class="btn gold" id="addev" style="background:var(--gold,#ffe9a8);color:var(--brand,#5b1212)">Thêm sự kiện</button></p></section>
   <div class="card" style="margin-bottom:16px"><div class="calbar"><h2>Tháng ${m}/${y}</h2><button class="btn ghost sm" id="cp">‹ Tháng trước</button><button class="btn ghost sm" id="ct">Hôm nay</button><button class="btn ghost sm" id="cn">Tháng sau ›</button></div>
    <div class="cal">${['T2','T3','T4','T5','T6','T7','CN'].map(x=>`<div class="dh">${x}</div>`).join('')}${cells}</div>
    <p class="meta" style="margin:8px 0 0">${Object.entries(EVT).map(([k,c])=>`<span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${c};margin-right:4px"></span>${esc(k)}`).join(' &nbsp; ')}</p></div>
@@ -1478,6 +1563,194 @@ function addEvDialog(){if(needLogin())return;
     closeDialog();if(o.dt){const p=parts(o.dt);state.cal={y:p.y,m:p.m}}refresh();
     if(warn)alert_('Sự kiện hiện chỉ lưu trong tab này vì tài khoản chưa có quyền đóng góp.')}
 }
+
+
+/* ---------- Quản trị giao diện và nội dung (chỉnh sửa trực tiếp trên trang) ---------- */
+state.site={t:{},fonts:{},fs:1,blocks:[],al:{}};state.siteImg={};state.cmsOn=false;
+const FONT_D=['Noto Serif','Lora','Merriweather','Playfair Display','Bitter','Be Vietnam Pro'];
+const FONT_B=['Be Vietnam Pro','Roboto','Open Sans','Noto Sans','Inter','Lexend','Nunito','Source Sans 3'];
+const FS_OPT=[['Nhỏ',.92],['Vừa',1],['Lớn',1.1],['Rất lớn',1.2]];
+const ALIGNS=[['','Mặc định'],['left','Canh trái'],['center','Canh giữa'],['right','Canh phải'],['justify','Canh đều hai bên']];
+function siteImg(k){return state.siteImg[k]||''}
+function normSite(c){const x=Object.assign({t:{},fonts:{},fs:1,blocks:[],theme:{},deco:{},al:{}},c||{});x.t=x.t||{};x.al=x.al||{};x.fonts=x.fonts||{};x.blocks=x.blocks||[];x.theme=x.theme||{};x.deco=x.deco||{};return x}
+const PRESETS=[['Đỏ truyền thống','#5b1212','#8c1c1c','#ffe9a8'],['Nâu đất','#4a2c14','#7a4a1e','#f3dfb0'],['Xanh rêu','#1f4a34','#2d6a4d','#f0efb8'],['Xanh dương','#17375e','#27518a','#ffe9a8'],['Tím','#3f2257','#6b3d91','#f3e1ff']];
+function hex2rgb(h){const m=/^#?([0-9a-f]{6})$/i.exec(h||'');if(!m)return'';const n=parseInt(m[1],16);return ((n>>16)&255)+','+((n>>8)&255)+','+(n&255)}
+function mixW(h,t){const r=hex2rgb(h).split(',').map(Number);if(r.length<3)return h;return '#'+r.map(v=>Math.round(v+(255-v)*t).toString(16).padStart(2,'0')).join('')}
+function fxApply(kind){const o=$('#fx');if(o&&o.dataset.k===(kind||''))return;if(o)o.remove();const set={hoa:['🌸','🌼','🌸'],la:['🍂','🍁','🍂']}[kind];if(!set)return;
+  const f=document.createElement('div');f.id='fx';f.dataset.k=kind;f.setAttribute('aria-hidden','true');
+  for(let i=0;i<16;i++){const x=document.createElement('span');x.textContent=set[i%set.length];x.style.left=(i*6.2+Math.random()*4)+'%';x.style.animationDuration=(9+Math.random()*9)+'s';x.style.animationDelay=(-Math.random()*14)+'s';x.style.fontSize=(14+Math.random()*14)+'px';f.appendChild(x)}
+  document.body.appendChild(f)}
+function noticeApply(n){let el=$('#notice');if(!n||!n.on||!String(n.t||'').trim()){if(el)el.remove();return}
+  if(!el){el=document.createElement('div');el.id='notice';el.setAttribute('role','status');document.body.insertBefore(el,document.body.firstChild)}
+  if(el.textContent!==n.t)el.textContent=n.t}
+async function saveSite(){if(DB)await DB.doc('site/config').set(state.site)}
+async function saveSiteImg(k,d){
+  if(DB){if(d)await DB.doc('siteimg/'+k).set({d,at:Date.now()});else await DB.doc('siteimg/'+k).delete()}
+  if(d)state.siteImg[k]=d;else delete state.siteImg[k]}
+async function fitImg(file,max){let q=.8,d=await shrinkW(file,max,q);while(d.length>880000&&q>.45){q-=.1;d=await shrinkW(file,max,q)}
+  if(d.length>880000)d=await shrinkW(file,Math.round(max*.7),.55);return d}
+function loadFont(n){if(!n)return;const id='gf-'+n.replace(/\W/g,'');if(document.getElementById(id))return;
+  const l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+n.replace(/ /g,'+')+':wght@400;500;600;700&display=swap';document.head.appendChild(l)}
+function siteBlocksHtml(){return (state.site.blocks||[]).map(b=>{const im=siteImg('blk-'+b.id);
+  return `<div class="card" style="margin-bottom:16px${b.al?';text-align:'+esc(b.al):''}"><div class="cms-tools"><button class="btn ghost sm" data-bk="edit:${esc(b.id)}">Sửa khối</button><button class="btn ghost sm" data-bk="up:${esc(b.id)}">↑ Lên</button><button class="btn ghost sm" data-bk="down:${esc(b.id)}">↓ Xuống</button><button class="btn ghost sm" data-bk="del:${esc(b.id)}">Xoá khối</button></div>
+  <h2 style="margin-top:0">${esc(b.t)}</h2>${im?`<img class="cbimg" src="${im}" alt="">`:''}${String(b.b||'').split(/\n\s*\n/).filter(Boolean).map(x=>`<p>${esc(x).replace(/\n/g,'<br>')}</p>`).join('')}</div>`}).join('')}
+function applySite(){
+  const S=state.site||{},root=document.documentElement,F=S.fonts||{};
+  if(F.d){loadFont(F.d);root.style.setProperty('--font-display','"'+F.d+'",Georgia,serif')}else root.style.removeProperty('--font-display');
+  if(F.b){loadFont(F.b);root.style.setProperty('--font-body','"'+F.b+'",system-ui,sans-serif')}else root.style.removeProperty('--font-body');
+  document.body.style.zoom=(S.fs&&S.fs!==1)?String(S.fs):'';
+  const Th=S.theme||{},De=S.deco||{},sv=(k,v)=>{if(v)root.style.setProperty(k,v);else root.style.removeProperty(k)};
+  const dark=root.getAttribute('data-theme')==='dark'||(root.getAttribute('data-theme')!=='light'&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches);
+  sv('--brand',Th.brand);sv('--brand-rgb',Th.brand?hex2rgb(Th.brand):'');sv('--accent2',Th.accent);sv('--accent',Th.accent?(dark?mixW(Th.accent,.5):Th.accent):'');sv('--gold',Th.gold);sv('--rad',De.rad);{const H={'180':'34px','240':'40px','300':'48px','380':'56px'};sv('--hdh',De.hh?De.hh+'px':'');sv('--hdf',De.hh?H[De.hh]:'')}
+  const pb=siteImg('bgpage');sv('--pbg',pb?'url("'+pb+'")':'');
+  const bc=document.body.classList;['dots','lines','lattice'].forEach(k=>bc.toggle('pat-'+k,De.pat===k));bc.toggle('hdbar',!!De.bar);bc.toggle('has-pbg',!!pb);
+  fxApply(De.fx||'');noticeApply(De.notice);
+  const bn=siteImg('banner'),hr=siteImg('hero');
+  if(bn)root.style.setProperty('--bn','url("'+bn+'")');else root.style.removeProperty('--bn');
+  if(hr)root.style.setProperty('--hero','url("'+hr+'")');else root.style.removeProperty('--hero');
+  document.querySelectorAll('[data-ck]').forEach(el=>{
+    if(el.dataset.d===undefined)el.dataset.d=el.textContent;
+    const v=(S.t||{})[el.dataset.ck],nv=v!==undefined?v:el.dataset.d;
+    if(el.textContent!==nv)el.textContent=nv;
+    el.style.whiteSpace=nv.indexOf('\n')>=0?'pre-line':'';
+    el.style.textAlign=(S.al||{})[el.dataset.ck]||'';
+  });
+  const nc=$('#navcur'),ca=document.querySelector('#tabs a[aria-current]');if(nc&&ca)nc.textContent=(ca.childNodes[0].textContent||'').trim()||'Menu';
+  document.querySelectorAll('img[data-ci]').forEach(im=>{const d=siteImg(im.dataset.ci);
+    if(d){if(!im.dataset.o)im.dataset.o=im.getAttribute('src');if(im.getAttribute('src')!==d)im.src=d}
+    else if(im.dataset.o&&im.getAttribute('src')!==im.dataset.o)im.src=im.dataset.o});
+  document.body.classList.toggle('cms-on',!!state.cmsOn&&adm());
+  cmsUI();
+}
+function cmsUI(){
+  let b=$('#cms');
+  if(!adm()){if(b)b.remove();state.cmsOn=false;document.body.classList.remove('cms-on');document.querySelectorAll('.cms-img').forEach(x=>x.remove());return}
+  if(!b){b=document.createElement('div');b.id='cms';b.setAttribute('role','toolbar');b.setAttribute('aria-label','Công cụ chỉnh sửa trang');document.body.appendChild(b);
+    b.addEventListener('click',e=>{const x=e.target.closest('[data-cm]');if(x)cmsAct(x.dataset.cm)})}
+  const h=(location.hash||'#trang-chu').slice(1),home=(h==='trang-chu'||h===''||h==='lich-su')?1:0,k=(state.cmsOn?1:0)+'|'+home;
+  if(b.dataset.k!==k){b.dataset.k=k;
+    b.innerHTML=state.cmsOn?`<span class="cmsl">Đang chỉnh sửa trang. Bấm vào chữ hoặc ảnh có viền vàng để sửa.</span><button class="btn sm" data-cm="font">Giao diện: màu, chữ, trang trí</button><button class="btn sm" data-cm="bg">Ảnh nền trang</button>${home?'<button class="btn sm" data-cm="blk">＋ Thêm khối vào trang chủ</button>':''}<button class="btn gold sm" data-cm="off">Xong</button>`:'<button class="btn" data-cm="on">✎ Chỉnh sửa trang</button>'}
+  document.querySelectorAll('[data-cimgbox]').forEach(bx=>{let bt=bx.querySelector(':scope>.cms-img');
+    if(!bt){bt=document.createElement('button');bt.type='button';bt.className='btn gold sm cms-img';bt.dataset.cimg=bx.dataset.cimgbox;bt.dataset.lab=bx.dataset.lab||'';bt.textContent='Đổi '+(bx.dataset.lab||'ảnh');bx.appendChild(bt)}});
+}
+function cmsAct(a){
+  if(a==='on'){state.cmsOn=true;applySite()}
+  else if(a==='off'){state.cmsOn=false;applySite()}
+  else if(a==='font')fontDialog();
+  else if(a==='bg')imgDialog('bgpage','ảnh nền cả trang');
+  else if(a==='blk')blockDialog();
+}
+document.addEventListener('click',e=>{
+  if(!state.cmsOn||!adm())return;
+  if(e.target.closest('#ov,#cms'))return;
+  const stop=()=>{e.preventDefault();e.stopPropagation()};
+  const bk=e.target.closest('[data-bk]');if(bk){stop();blockAct(bk.dataset.bk);return}
+  const bt=e.target.closest('[data-cimg]');if(bt){stop();imgDialog(bt.dataset.cimg,bt.dataset.lab);return}
+  const im=e.target.closest('img[data-ci]');if(im){stop();imgDialog(im.dataset.ci,im.alt||'ảnh này');return}
+  const ck=e.target.closest('[data-ck]');if(ck){stop();textDialog(ck)}
+},true);
+async function cmsSave(fn){try{await fn();return true}catch(e){alert_('Không lưu được. Chỉ quản trị viên mới sửa được trang, hoặc kết nối đang gián đoạn.');return false}}
+function textDialog(el){
+  const k=el.dataset.ck,def=el.dataset.d!==undefined?el.dataset.d:el.textContent,cur=el.textContent,has=(state.site.t||{})[k]!==undefined;state.site.al=state.site.al||{};
+  const long=def.length>60||def.indexOf('\n')>=0||cur.length>60;
+  const d=$('#dlg');d.className='dlg wide';
+  d.innerHTML=`<h2 id="dtitle">Sửa nội dung</h2>
+  <label class="f">Nội dung mới${long?`<textarea id="ct" rows="${Math.min(12,Math.max(4,Math.ceil(cur.length/70)))}" maxlength="4000"></textarea>`:'<input type="text" id="ct" maxlength="300">'}</label>
+  <label class="f">Canh lề<select id="cal">${ALIGNS.map(([v,l])=>`<option value="${v}"${((state.site.al||{})[k]||'')===v?' selected':''}>${l}</option>`).join('')}</select></label>
+  <p class="small">Dòng trống giữa các đoạn sẽ được giữ lại. Chỉ nhập chữ thường, không có định dạng.</p>
+  <div class="row"><button class="btn" id="cs">Lưu</button>${(has||(state.site.al||{})[k])?'<button class="btn ghost" id="cr">Về bản gốc</button>':''}<button class="btn ghost" id="cx">Huỷ</button></div>`;
+  $('#ct').value=cur;$('#ov').hidden=false;$('#ct').focus();
+  $('#cx').onclick=()=>{d.className='dlg';closeDialog()};
+  $('#cs').onclick=async()=>{const v=$('#ct').value.replace(/\s+$/,'');if(!v.trim()){$('#ct').focus();return}
+    const old=state.site.t[k],oal=state.site.al[k],na=$('#cal').value;if(v===def)delete state.site.t[k];else state.site.t[k]=v;if(na)state.site.al[k]=na;else delete state.site.al[k];
+    if(await cmsSave(saveSite)){d.className='dlg';closeDialog();applySite()}else{if(old===undefined)delete state.site.t[k];else state.site.t[k]=old;if(oal===undefined)delete state.site.al[k];else state.site.al[k]=oal}};
+  const r=$('#cr');if(r)r.onclick=async()=>{const old=state.site.t[k],oal=state.site.al[k];delete state.site.t[k];delete state.site.al[k];
+    if(await cmsSave(saveSite)){d.className='dlg';closeDialog();applySite()}else{if(old!==undefined)state.site.t[k]=old;if(oal!==undefined)state.site.al[k]=oal}};
+}
+function imgDialog(key,label,done){
+  const d=$('#dlg');d.className='dlg wide';let nd=null;const cur=siteImg(key);
+  d.innerHTML=`<h2 id="dtitle">Đổi ${esc(label||'ảnh')}</h2>
+  <p class="small">${cur?'Đang dùng ảnh do quản trị viên tải lên.':'Đang dùng ảnh gốc của trang.'} Chọn ảnh JPG hoặc PNG; ảnh sẽ được thu nhỏ tự động.</p>
+  <div id="pv"></div><div class="err" id="ce" role="alert"></div>
+  <div class="row"><button class="btn ghost" id="cp" type="button">Chọn ảnh từ máy</button><button class="btn" id="cs" disabled>Lưu</button>${cur?'<button class="btn ghost" id="cr">Về ảnh gốc</button>':''}<button class="btn ghost" id="cx">Huỷ</button></div>`;
+  $('#ov').hidden=false;
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  const big=(key==='banner'||key==='hero')?1800:1400;
+  inp.onchange=async()=>{const f=inp.files[0];if(!f)return;try{nd=await fitImg(f,big);$('#pv').innerHTML='<img class="pvimg" src="'+nd+'" alt="Xem trước">';$('#cs').disabled=false;$('#ce').textContent=''}catch(e){$('#ce').textContent='Không đọc được ảnh này. Hãy dùng tệp JPG hoặc PNG.'}};
+  $('#cp').onclick=()=>inp.click();
+  $('#cx').onclick=()=>{d.className='dlg';closeDialog()};
+  $('#cs').onclick=async()=>{if(!nd)return;if(await cmsSave(()=>saveSiteImg(key,nd))){d.className='dlg';closeDialog();applySite();if(done)done()}};
+  const r=$('#cr');if(r)r.onclick=async()=>{if(await cmsSave(()=>saveSiteImg(key,null))){d.className='dlg';closeDialog();applySite();if(done)done()}};
+}
+function fontDialog(){
+  const S0=state.site;const snap=JSON.stringify({f:S0.fonts,s:S0.fs,th:S0.theme,de:S0.deco});const d=$('#dlg');d.className='dlg wide';
+  const F=S0.fonts||{},Th=S0.theme||{},De=S0.deco||{},P0=PRESETS[0];
+  const opt=(v,l,cur)=>`<option value="${v}"${cur===v?' selected':''}>${l}</option>`;
+  d.innerHTML=`<h2 id="dtitle">Giao diện: màu sắc, chữ, trang trí</h2>
+  <h3 style="margin:8px 0 2px">Màu sắc</h3>
+  <div class="swatches">${PRESETS.map((p,n)=>`<button type="button" class="swatch" data-pre="${n}"><i style="background:${p[1]}"></i><i style="background:${p[2]}"></i><i style="background:${p[3]}"></i>${esc(p[0])}</button>`).join('')}</div>
+  <div class="crow"><label class="f">Màu đầu trang<input type="color" id="cb" value="${Th.brand||P0[1]}"></label><label class="f">Màu nhấn (nút, liên kết)<input type="color" id="ca" value="${Th.accent||P0[2]}"></label><label class="f">Màu chữ nổi (vàng)<input type="color" id="cg" value="${Th.gold||P0[3]}"></label></div>
+  <h3 style="margin:8px 0 2px">Chữ</h3>
+  <label class="f">Phông chữ tiêu đề<select id="fd"><option value="">Mặc định (Noto Serif)</option>${FONT_D.map(n=>`<option${F.d===n?' selected':''}>${esc(n)}</option>`).join('')}</select></label>
+  <label class="f">Phông chữ nội dung<select id="fb"><option value="">Mặc định (Be Vietnam Pro)</option>${FONT_B.map(n=>`<option${F.b===n?' selected':''}>${esc(n)}</option>`).join('')}</select></label>
+  <label class="f">Cỡ hiển thị toàn trang<select id="fs">${FS_OPT.map(([l,v])=>`<option value="${v}"${(S0.fs||1)===v?' selected':''}>${l}</option>`).join('')}</select></label>
+  <h3 style="margin:8px 0 2px">Trang trí</h3>
+  <label class="f">Chiều cao đầu trang (ảnh header)<select id="dh">${opt('','Cao vừa (mặc định)',De.hh||'')}${opt('180','Thấp',De.hh||'')}${opt('300','Cao',De.hh||'')}${opt('380','Rất cao',De.hh||'')}</select></label>
+  <label class="f">Hoa văn nền<select id="dp">${opt('','Không',De.pat||'')}${opt('dots','Chấm nhỏ',De.pat||'')}${opt('lines','Sọc chéo mờ',De.pat||'')}${opt('lattice','Ô lưới mờ',De.pat||'')}</select></label>
+  <label class="f">Bo góc khung nội dung<select id="dr">${opt('','Mặc định',De.rad||'')}${opt('0px','Vuông',De.rad||'')}${opt('6px','Bo nhẹ',De.rad||'')}${opt('20px','Bo tròn',De.rad||'')}</select></label>
+  <label class="f">Hiệu ứng rơi<select id="dx">${opt('','Không',De.fx||'')}${opt('hoa','Hoa đào, hoa mai (dịp Tết)',De.fx||'')}${opt('la','Lá vàng rơi (mùa thu)',De.fx||'')}</select></label>
+  <label class="f" style="display:flex;flex-direction:row;gap:8px;align-items:center"><input type="checkbox" id="db"${De.bar?' checked':''}> Viền vàng dưới đầu trang và quanh ảnh trang chủ</label>
+  <label class="f" style="display:flex;flex-direction:row;gap:8px;align-items:center"><input type="checkbox" id="dn"${(De.notice||{}).on?' checked':''}> Hiện dải thông báo trên cùng trang</label>
+  <label class="f">Nội dung dải thông báo<input type="text" id="dt" maxlength="160" value="${esc((De.notice||{}).t||'')}" placeholder="ví dụ Giỗ Nhất Thế Tổ ngày 07 tháng 11 âm lịch"></label>
+  <div class="fprev"><h3 style="margin:0 0 4px">Gia phả họ Nguyễn Đặng</h3><p style="margin:0">Làng Cổ Lũy, xã Hải Ba, huyện Hải Lăng, Quảng Trị. Con cháu tìm lại cội nguồn.</p></div>
+  <p class="small">Trang thay đổi ngay để xem thử. Bấm Lưu thì mọi người đều thấy.</p>
+  <div class="err" id="ce" role="alert"></div>
+  <div class="row"><button class="btn" id="cs">Lưu</button><button class="btn ghost" id="cr">Về mặc định</button><button class="btn ghost" id="cx">Huỷ</button></div>`;
+  $('#ov').hidden=false;
+  const live=()=>{const S=state.site;S.fonts={};if($('#fd').value)S.fonts.d=$('#fd').value;if($('#fb').value)S.fonts.b=$('#fb').value;S.fs=+$('#fs').value||1;
+    const cb=$('#cb').value,ca=$('#ca').value,cg=$('#cg').value;S.theme=(cb===P0[1]&&ca===P0[2]&&cg===P0[3])?{}:{brand:cb,accent:ca,gold:cg};
+    S.deco={};if($('#dp').value)S.deco.pat=$('#dp').value;if($('#dr').value)S.deco.rad=$('#dr').value;if($('#dh').value)S.deco.hh=$('#dh').value;if($('#dx').value)S.deco.fx=$('#dx').value;if($('#db').checked)S.deco.bar=1;
+    if($('#dn').checked||$('#dt').value.trim())S.deco.notice={on:$('#dn').checked,t:$('#dt').value.trim()};
+    applySite()};
+  d.querySelectorAll('select,input').forEach(x=>{x.onchange=live;if(x.type==='text'||x.type==='color')x.oninput=live});
+  d.querySelectorAll('[data-pre]').forEach(b=>b.onclick=()=>{const p=PRESETS[+b.dataset.pre];$('#cb').value=p[1];$('#ca').value=p[2];$('#cg').value=p[3];live()});
+  const back=()=>{const o=JSON.parse(snap);state.site.fonts=o.f||{};state.site.fs=o.s||1;state.site.theme=o.th||{};state.site.deco=o.de||{};applySite()};
+  $('#cx').onclick=()=>{back();d.className='dlg';closeDialog()};
+  $('#cr').onclick=()=>{$('#cb').value=P0[1];$('#ca').value=P0[2];$('#cg').value=P0[3];['#fd','#fb','#dp','#dr','#dx','#dh'].forEach(q=>$(q).value='');$('#fs').value='1';$('#db').checked=false;$('#dn').checked=false;$('#dt').value='';live()};
+  $('#cs').onclick=async()=>{if(await cmsSave(saveSite)){d.className='dlg';closeDialog()}};
+}
+function blockDialog(old){
+  const d=$('#dlg');d.className='dlg wide';const o=old||{};const id=old?old.id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,4);let nd=null,rmi=false;
+  d.innerHTML=`<h2 id="dtitle">${old?'Sửa khối nội dung':'Thêm khối vào trang chủ'}</h2>
+  <label class="f">Tiêu đề<input type="text" id="bt" maxlength="120" value="${esc(o.t||'')}"></label>
+  <label class="f">Nội dung (để trống một dòng giữa các đoạn)<textarea id="bb" rows="8" maxlength="6000">${esc(o.b||'')}</textarea></label>
+  <label class="f">Canh lề<select id="ba">${ALIGNS.map(([v,l])=>`<option value="${v}"${(o.al||'')===v?' selected':''}>${l}</option>`).join('')}</select></label>
+  <div id="pv">${siteImg('blk-'+id)?'<img class="pvimg" src="'+siteImg('blk-'+id)+'" alt="">':''}</div>
+  <div class="err" id="ce" role="alert"></div>
+  <div class="row"><button class="btn ghost" id="cp" type="button">${siteImg('blk-'+id)?'Đổi ảnh':'＋ Thêm ảnh'}</button>${siteImg('blk-'+id)?'<button class="btn ghost" id="ci" type="button">Bỏ ảnh</button>':''}<button class="btn" id="cs">Lưu</button><button class="btn ghost" id="cx">Huỷ</button></div>`;
+  $('#ov').hidden=false;
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=async()=>{const f=inp.files[0];if(!f)return;try{nd=await fitImg(f,1200);rmi=false;$('#pv').innerHTML='<img class="pvimg" src="'+nd+'" alt="">'}catch(e){$('#ce').textContent='Không đọc được ảnh này.'}};
+  $('#cp').onclick=()=>inp.click();
+  const ci=$('#ci');if(ci)ci.onclick=()=>{nd=null;rmi=true;$('#pv').innerHTML=''};
+  $('#cx').onclick=()=>{d.className='dlg';closeDialog()};
+  $('#cs').onclick=async()=>{const t=$('#bt').value.trim(),b=$('#bb').value.trim();if(!t||!b){$('#ce').textContent='Cần có tiêu đề và nội dung.';return}
+    const prev=JSON.stringify(state.site.blocks);
+    const ok=await cmsSave(async()=>{if(nd)await saveSiteImg('blk-'+id,nd);else if(rmi)await saveSiteImg('blk-'+id,null);
+      const rec={id,t,b};if($('#ba').value)rec.al=$('#ba').value;const L=state.site.blocks||[];const i=L.findIndex(x=>x.id===id);if(i>=0)L[i]=rec;else L.push(rec);state.site.blocks=L;await saveSite()});
+    if(ok){d.className='dlg';closeDialog();refresh()}else state.site.blocks=JSON.parse(prev)};
+}
+async function blockAct(a){
+  const [op,id]=a.split(':');const L=state.site.blocks||[];const i=L.findIndex(x=>x.id===id);if(i<0)return;
+  if(op==='edit'){blockDialog(L[i]);return}
+  if(op==='del'){const d=$('#dlg');d.className='dlg';d.innerHTML=`<h2 id="dtitle">Xoá khối này khỏi trang chủ?</h2><p>${esc(L[i].t)}</p><div class="row"><button class="btn" id="dy" style="background:#a3271f">Xoá</button><button class="btn ghost" id="dn">Không xoá</button></div>`;$('#ov').hidden=false;$('#dn').onclick=closeDialog;
+    $('#dy').onclick=async()=>{const prev=JSON.stringify(L);if(await cmsSave(async()=>{state.site.blocks=L.filter(x=>x.id!==id);await saveSite();if(siteImg('blk-'+id))await saveSiteImg('blk-'+id,null)})){closeDialog();refresh()}else state.site.blocks=JSON.parse(prev)};return}
+  const j=op==='up'?i-1:i+1;if(j<0||j>=L.length)return;
+  const prev=JSON.stringify(L);[L[i],L[j]]=[L[j],L[i]];
+  if(await cmsSave(saveSite))refresh();else state.site.blocks=JSON.parse(prev);
+}
+(function(){const v=$('#view');if(v)new MutationObserver(()=>applySite()).observe(v,{childList:true})})();
+applySite();
 
 window.addEventListener('hashchange',route);
 modeBanner();route();initDb();
