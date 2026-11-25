@@ -1033,10 +1033,13 @@ function photoDialog(id){
 }
 
 /* ---------- poster (phả đồ treo tường) ---------- */
-const CW=134,CH=170,GAP=16,ROWP=250,HEAD=380,PADX=90;
+const CW=134,CH=216,GAP=16,ROWP=300,HEAD=380,PADX=90;
 function rootsList(){return DATA.filter(p=>p.r==='C'&&(kidsOf.get(p.i)||[]).length)}
 function wrapName(s,n){const w=s.split(' ');const out=[''];w.forEach(x=>{const l=out[out.length-1];if((l+' '+x).trim().length<=n)out[out.length-1]=(l+' '+x).trim();else out.push(x)});
   if(out.length>2){const a=out.slice(0,1);a.push(out.slice(1).join(' '));return a}return out}
+function spLines(sq,sp){const out=[];sq.forEach((q,k)=>{const r=roleOf(q);const w=sp[k].split(' ');const ls=[''];
+  w.forEach(x=>{const l=ls[ls.length-1];const lim=ls.length==1?20:24;if((l+' '+x).trim().length<=lim)ls[ls.length-1]=(l+' '+x).trim();else ls.push(x)});
+  ls.forEach((t,i)=>out.push({r:i?'':r,t}))});return out.slice(0,6)}
 function trunc(s,n){return s.length>n?s.slice(0,n-1)+'…':s}
 function posterSVG(rootId,depth,showSp){
   const rp=byid.get(rootId);
@@ -1091,7 +1094,7 @@ function posterSVG(rootId,depth,showSp){
      </g>
      <g data-go="${p.i}" style="cursor:pointer">${lines.map((t,i)=>`<text x="${CW/2}" y="${118+i*14}" text-anchor="middle" font-size="12" font-weight="700" fill="#5b1212">${esc(t)}</text>`).join('')}
       <text x="${CW/2}" y="${lines.length>1?148:134}" text-anchor="middle" font-size="10.5" fill="#6b5a2e">${yearOf(p)?'sinh '+yearOf(p):''}</text>
-      ${showSp&&sp.length?`<text x="${CW/2}" y="${lines.length>1?161:149}" text-anchor="middle" font-size="9.5" fill="#6b5a2e"><tspan font-weight="700" fill="#8c1c1c">${roleOf(sq[0])}:</tspan> ${esc(trunc(sp[0],16))}${sp.length>1?' +'+(sp.length-1):''}</text>`:''}</g>
+      ${showSp&&sp.length?`<text text-anchor="middle" font-size="9.5" fill="#6b5a2e">${spLines(sq,sp).map((l,i)=>`<tspan x="${CW/2}" y="${(lines.length>1?161:149)+i*11.5}">${l.r?`<tspan font-weight="700" fill="#8c1c1c">${esc(l.r)}:</tspan> `:''}${esc(l.t)}</tspan>`).join('')}</text>`:''}</g>
      ${n.hid?`<g transform="translate(${CW/2} ${CH+18})"><rect x="-38" y="-12" width="76" height="24" rx="12" fill="#6e1414" stroke="#c9a23f" stroke-width="2"/><text y="4" text-anchor="middle" font-size="11" fill="#f3d98b" font-weight="600">+ ${n.hid} con</text></g>`:''}
     </g>`});
   return s+'</svg>';
