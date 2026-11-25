@@ -120,6 +120,8 @@ ul.tree li{margin:2px 0}
 .gslot{border:2px dashed var(--line);border-radius:12px;background:var(--surface);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;cursor:pointer;overflow:hidden;position:relative;padding:0;color:var(--muted);font:inherit}
 .gslot:hover{border-color:#c9a24a}.gslot img{width:100%;height:100%;object-fit:cover;display:block}
 .gcap{font-size:13px;margin-top:6px;text-align:center}
+.gslot{position:relative}.gcnt{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;padding:2px 8px;border-radius:10px}
+.gal2{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));margin:10px 0}.gph{position:relative;aspect-ratio:4/3}.gph img{width:100%;height:100%;object-fit:cover;border-radius:8px;cursor:zoom-in;display:block}.gx{position:absolute;top:4px;right:4px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;cursor:pointer;font-size:14px}
 .nkind{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;background:#efe6d2;color:var(--brand,#5b1212)}
 .nkind.fund{background:var(--brand,#5b1212);color:var(--gold,#ffe9a8)}
 .bar{height:12px;border-radius:99px;background:#e7e2d6;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,#a32a2a,#d9a441)}
@@ -1305,23 +1307,49 @@ const HIST=[
  {y:'Hôm nay',t:'Số hoá gia phả',b:'Gia phả được chuyển thành dữ liệu để tra cứu trên trang web này. Con cháu có thể bổ sung thông tin, hình ảnh và bài viết để dòng họ có thêm tư liệu.'}
 ];
 const HPH=[['h1','Nhà thờ họ'],['h2','Mộ Nhất Thế Tổ (xứ Lòi Két)'],['h3','Sắc phong, văn bản cổ'],['h4','Gia phả các thời'],['h5','Lễ giỗ, họp họ'],['h6','Ảnh tư liệu khác']];
-function gslot(id,label){const d=state.photos[id];
-  return `<div><button class="gslot" data-g="${id}" aria-label="${esc(label)}">${d?`<img src="${d}" alt="${esc(label)}">`:`<span style="font-size:28px">＋</span><span style="font-size:13px">Thêm ảnh</span>`}</button><div class="gcap">${esc(label)}</div></div>`}
+const gcap=(id,l)=>((state.site&&state.site.t)||{})['gcap-'+id]||l;
+const albums=()=>HPH.concat(((state.site&&state.site.albums)||[]).map(a=>[a.id,a.t]));
+function albumKeys(a){return Object.keys(state.photos).filter(k=>k===a||k.startsWith(a+'_')).sort((x,y)=>x===a?-1:y===a?1:x<y?-1:1)}
+function gslot(id,label){label=gcap(id,label);const ks=albumKeys(id),d=ks.length?state.photos[ks[0]]:null;
+  return `<div><button class="gslot" data-g="${id}" aria-label="${esc(label)}">${d?`<img src="${d}" alt="${esc(label)}"><span class="gcnt">${ks.length} ảnh</span>`:`<span style="font-size:28px">＋</span><span style="font-size:13px">Thêm ảnh</span>`}</button><div class="gcap">${esc(label)}</div></div>`}
 /* ảnh tư liệu: ảnh ngang, giữ tỷ lệ */
 function shrinkW(file,max,q){return new Promise((res,rej)=>{const r=new FileReader();r.onerror=rej;r.onload=()=>{const im=new Image();im.onerror=rej;im.onload=()=>{
   const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
   const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',q))};im.src=r.result};r.readAsDataURL(file)})}
 const gInp=document.createElement('input');gInp.type='file';gInp.accept='image/*';gInp.style.display='none';document.body.appendChild(gInp);
-let gTarget=null;
-gInp.onchange=async()=>{const f=gInp.files[0];gInp.value='';if(!f||!gTarget)return;
-  try{const d=await shrinkW(f,720,0.78);state.photos[gTarget]=d;refresh();closeDialog();
-    if(DB){try{await DB.doc('gallery/'+gTarget).set({d,at:Date.now()})}catch(e){alert_('Ảnh hiện chỉ lưu trong tab này vì tài khoản chưa có quyền đóng góp.')}}
-  }catch(e){alert_('Không đọc được ảnh này. Hãy chọn tệp JPG hoặc PNG.')}};
-function gDialog(id,label){gTarget=id;const cur=state.photos[id];if(!cur){if(needLogin())return;gInp.click();return}
-  $('#dlg').innerHTML=`<h2 id="dtitle">${esc(label)}</h2><p><img src="${cur}" alt="" style="max-width:100%;border-radius:10px"></p>
-  <div class="row"><button class="btn" id="gc" ${canDelUid(state.photoUid[id])?'':'hidden'}>Chọn ảnh khác</button><button class="btn ghost" id="gd" ${canDelUid(state.photoUid[id])?'':'hidden'}>Xoá ảnh</button><button class="btn ghost" id="gq">Đóng</button></div>`;
-  $('#ov').hidden=false;$('#gc').onclick=()=>gInp.click();$('#gq').onclick=closeDialog;
-  $('#gd').onclick=async()=>{delete state.photos[id];refresh();closeDialog();if(DB){try{await DB.doc('gallery/'+id).delete()}catch(e){}}}}
+let gTarget=null;gInp.multiple=true;
+gInp.onchange=async()=>{const fs=[...gInp.files];gInp.value='';const a=gTarget;if(!fs.length||!a)return;let warn=false,bad=0;
+  for(const f of fs){try{const d=await shrinkW(f,720,0.78),k=a+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    state.photos[k]=d;if(DB){try{await DB.doc('gallery/'+k).set({d,at:Date.now()})}catch(e){warn=true}}}catch(e){bad++}}
+  refresh();gDialog(a,(albums().find(x=>x[0]===a)||[0,''])[1]);
+  if(bad)alert_('Có '+bad+' tệp không đọc được. Hãy chọn tệp JPG hoặc PNG.');else if(warn)alert_('Ảnh hiện chỉ lưu trong tab này vì tài khoản chưa có quyền đóng góp.')};
+const gCanDel=k=>typeof canDelUid!=='function'||canDelUid(state.galUid&&state.galUid[k]);
+function gDialog(id,label0){gTarget=id;const A=adm(),label=gcap(id,label0),ks=albumKeys(id),cust=((state.site&&state.site.albums)||[]).some(a=>a.id===id);
+  const d=$('#dlg');d.className='dlg wide';
+  d.innerHTML=`<h2 id="dtitle">${esc(label)}</h2><p class="meta">${ks.length?ks.length+' ảnh. Bấm vào ảnh để xem lớn.':'Chưa có ảnh. Bấm Thêm ảnh, có thể chọn nhiều ảnh cùng lúc.'}</p>
+  ${ks.length?`<div class="gal gal2">${ks.map(k=>`<div class="gph"><img src="${state.photos[k]}" alt="" data-pk="${k}" loading="lazy">${gCanDel(k)?`<button class="gx" data-pd="${k}" aria-label="Xoá ảnh này">✕</button>`:''}</div>`).join('')}</div>`:''}
+  ${A?`<label class="f">Tên album<input type="text" id="gn" maxlength="120"></label><div class="err" id="ge" role="alert"></div>`:''}
+  <div class="row"><button class="btn" id="gc">Thêm ảnh</button>${A?'<button class="btn ghost" id="gs">Lưu tên</button>':''}${(A&&cust)?'<button class="btn ghost" id="ga">Xoá album</button>':''}<button class="btn ghost" id="gq">Đóng</button></div>`;
+  $('#ov').hidden=false;$('#gc').onclick=()=>{if(needLogin())return;gInp.click()};$('#gq').onclick=closeDialog;
+  d.querySelectorAll('[data-pk]').forEach(im=>im.onclick=()=>{const k=im.dataset.pk;lightbox(state.photos[k],label);$('#zq').onclick=()=>gDialog(id,label0)});
+  d.querySelectorAll('[data-pd]').forEach(b=>b.onclick=async e=>{e.stopPropagation();const k=b.dataset.pd;delete state.photos[k];refresh();gDialog(id,label0);
+    if(DB){try{await DB.doc('gallery/'+k).delete()}catch(e){}}});
+  if(A){$('#gn').value=label;
+    $('#gs').onclick=async()=>{const v=$('#gn').value.trim(),S=state.site;S.t=S.t||{};const k='gcap-'+id,old=S.t[k],al=S.albums||[],oa=JSON.stringify(al);
+      const ca=al.find(a=>a.id===id);
+      if(ca){if(v)ca.t=v}else{if(!v||v===label0)delete S.t[k];else S.t[k]=v}
+      try{if(DB)await DB.doc('site/config').set(state.site);closeDialog();refresh()}
+      catch(e){if(old===undefined)delete S.t[k];else S.t[k]=old;if(ca)S.albums=JSON.parse(oa);$('#ge').textContent='Chưa lưu được tên. Cần quyền quản trị.'}};
+    const ga=$('#ga');if(ga)ga.onclick=async()=>{if(!confirm('Xoá album này cùng tất cả ảnh trong album?'))return;
+      const S=state.site,oa=S.albums;S.albums=oa.filter(a=>a.id!==id);const gone=ks.slice();gone.forEach(k=>delete state.photos[k]);
+      try{if(DB){await DB.doc('site/config').set(S);for(const k of gone){try{await DB.doc('gallery/'+k).delete()}catch(e){}}}closeDialog();refresh()}
+      catch(e){S.albums=oa;$('#ge').textContent='Chưa xoá được. Cần quyền quản trị.'}}}}
+function albumAdd(){const d=$('#dlg');d.className='dlg';
+  d.innerHTML=`<h2 id="dtitle">Thêm album ảnh</h2><label class="f">Tên album (ví dụ: Kỵ họ 2026)<input type="text" id="an" maxlength="120"></label><div class="err" id="ae" role="alert"></div><div class="row"><button class="btn" id="as">Tạo album</button><button class="btn ghost" id="aq">Huỷ</button></div>`;
+  $('#ov').hidden=false;$('#an').focus();$('#aq').onclick=closeDialog;
+  $('#as').onclick=async()=>{const v=$('#an').value.trim();if(!v){$('#ae').textContent='Cần có tên album.';return}
+    const S=state.site,oa=S.albums;S.albums=(oa||[]).concat([{id:'a'+Date.now().toString(36),t:v}]);
+    try{if(DB)await DB.doc('site/config').set(S);closeDialog();refresh()}catch(e){S.albums=oa;$('#ae').textContent='Chưa tạo được. Cần quyền quản trị.'}}}
 
 /* ---------- blog dòng họ ---------- */
 state.posts=[];state.localPosts=[];state.news=[];state.localNews=[];
@@ -1515,10 +1543,11 @@ function renderHome(){
    <figure style="margin:0"><img src="img/ban-do.jpg" alt="Bản đồ tỉnh Quảng Trị thời Pháp thuộc" loading="lazy" data-lb="ban-do" data-ci="ban-do" style="width:100%;border-radius:10px;cursor:zoom-in;border:1px solid var(--line)"><figcaption class="meta" style="margin-top:6px">Bản đồ tỉnh Quảng Trị thời Pháp thuộc (tỷ lệ 1:500.000), có ghi địa danh Cổ Lũy ở vùng đồng bằng ven biển. Bấm vào ảnh để xem lớn.</figcaption></figure></div>
   <div class="card"><h2 style="margin-top:0" data-ck="doc-h">Hình ảnh tư liệu của họ</h2>
    <p class="meta" data-ck="doc-p">Bấm vào ô để thêm ảnh nhà thờ, mộ phần, sắc phong, gia phả cũ hoặc ảnh lễ giỗ. Bấm lại để đổi hoặc xoá.</p>
-   <div class="gal">${HPH.map(([i,l])=>gslot(i,l)).join('')}</div></div>
+   <div class="gal">${albums().map(([i,l])=>gslot(i,l)).join('')}</div>${adm()?'<p style="margin:12px 0 0"><button class="btn ghost sm" id="newalb">Thêm album</button></p>':''}</div>
   <p class="meta" style="margin-top:12px">Nguồn: “Những sự tích của họ Nguyễn Đặng” (Nguyễn Đặng Vọng, 1973) và Gia phả phái 3 họ Nguyễn Đặng (2008).</p>`;
   const v=$('#view');
-  v.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>gDialog(b.dataset.g,b.getAttribute('aria-label')));
+  v.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>gDialog(b.dataset.g,(albums().find(x=>x[0]===b.dataset.g)||[0,b.getAttribute('aria-label')])[1]));
+  const na=$('#newalb');if(na)na.onclick=albumAdd;
   v.querySelectorAll('[data-lb]').forEach(i=>i.onclick=()=>lightbox(siteImg(i.dataset.lb)||'img/'+i.dataset.lb+'.jpg',i.alt));
   bindEv(v);
 }
@@ -1536,7 +1565,7 @@ const todayISO=()=>{const t=new Date();return isoOf(t.getDate(),t.getMonth()+1,t
 const WD=['Chủ nhật','Thứ hai','Thứ ba','Thứ tư','Thứ năm','Thứ sáu','Thứ bảy'];
 function parts(iso){const[y,m,d]=iso.split('-').map(Number);return{y,m,d,wd:new Date(y,m-1,d).getDay()}}
 function lunarOf(iso){const p=parts(iso);return solar2lunar(p.d,p.m,p.y)}
-function allEv(){const u=state.events.concat(state.localEv),ids=new Set(u.map(x=>x.id));return u.concat(SEED_EV.filter(x=>!ids.has(x.id)))}
+function allEv(){const u0=state.events.concat(state.localEv),u=u0.filter(x=>x.nt!=='__hidden__'),ids=new Set(u0.map(x=>x.id));return u.concat(SEED_EV.filter(x=>!ids.has(x.id)))}
 function occIn(ev,y){
   if(ev.dt)return ev.dt.startsWith(y+'-')?[ev.dt]:[];
   const out=[];if(ev.ld&&ev.lm)[y-1,y,y+1].forEach(ly=>{const r=lunar2solar(ev.ld,ev.lm,ly,0);if(r&&r[2]===y)out.push(isoOf(r[0],r[1],r[2]))});
@@ -1559,14 +1588,16 @@ function renderCal(){
     const iso=isoOf(d,m,y),l=solar2lunar(d,m,y),evs=map[iso]||[];
     cells+=`<div class="dc${iso===t?' today':''}"><div class="dn"><b>${d}</b><i class="${l[0]===1?'m1':''}">${l[0]===1?l[0]+'/'+l[1]:l[0]}</i></div>${evs.map(e=>`<button class="pill" style="background:${EVT[e.k]||'#8f2323'}" data-ev="${esc(e.id)}" data-oc="${iso}">${esc(e.t)}</button>`).join('')}</div>`}
   const ups=upcoming();
+  const hidS=adm()?SEED_EV.filter(x=>state.events.concat(state.localEv).some(e=>e.id===x.id&&e.nt==='__hidden__')):[];
   $('#view').innerHTML=`<section class="hero"><h2>Lịch sự kiện của họ</h2><p>Kỵ giỗ họ, tạ lăng, họp phái, họp họ và các dịp chung của dòng họ. Ai cũng có thể thêm sự kiện và đăng ký tham dự để cả nhà tiện sắp xếp. Ngày nhỏ ở góc ô là ngày âm lịch.</p>
    <p style="margin-top:12px"><button class="btn gold" id="addev" style="background:var(--gold,#ffe9a8);color:var(--brand,#5b1212)">Thêm sự kiện</button></p></section>
   <div class="card" style="margin-bottom:16px"><div class="calbar"><h2>Tháng ${m}/${y}</h2><button class="btn ghost sm" id="cp">‹ Tháng trước</button><button class="btn ghost sm" id="ct">Hôm nay</button><button class="btn ghost sm" id="cn">Tháng sau ›</button></div>
    <div class="cal">${['T2','T3','T4','T5','T6','T7','CN'].map(x=>`<div class="dh">${x}</div>`).join('')}${cells}</div>
    <p class="meta" style="margin:8px 0 0">${Object.entries(EVT).map(([k,c])=>`<span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${c};margin-right:4px"></span>${esc(k)}`).join(' &nbsp; ')}</p></div>
-  <div class="card"><h2 style="margin-top:0">Các sự kiện sắp tới</h2><div class="evl">${ups.map(u=>evCard(u.ev,u.occ)).join('')||'<p class="meta">Chưa có sự kiện nào.</p>'}</div></div>`;
+  <div class="card"><h2 style="margin-top:0">Các sự kiện sắp tới</h2><div class="evl">${ups.map(u=>evCard(u.ev,u.occ)).join('')||'<p class="meta">Chưa có sự kiện nào.</p>'}</div>${hidS.length?`<p class="meta" style="margin-top:12px">Sự kiện mặc định đã xoá: ${hidS.map(x=>`${esc(x.t)} <button class="btn ghost sm" data-rsh="${x.id}">Khôi phục</button>`).join(' ')}</p>`:''}</div>`;
   const step=k=>{let mm=state.cal.m+k,yy=state.cal.y;if(mm<1){mm=12;yy--}if(mm>12){mm=1;yy++}state.cal={y:yy,m:mm};renderCal()};
   $('#cp').onclick=()=>step(-1);$('#cn').onclick=()=>step(1);$('#ct').onclick=()=>{const n=new Date();state.cal={y:n.getFullYear(),m:n.getMonth()+1};renderCal()};
+  $('#view').querySelectorAll('[data-rsh]').forEach(b=>b.onclick=async()=>{const id=b.dataset.rsh;state.localEv=state.localEv.filter(x=>x.id!==id);state.events=state.events.filter(x=>x.id!==id);if(DB){try{await DB.doc('events/'+id).delete()}catch(e){}}refresh()});
   $('#addev').onclick=()=>addEvDialog();bindEv($('#view'));
 }
 function evDialog(id,occ){
@@ -1577,11 +1608,15 @@ function evDialog(id,occ){
   ${ev.nt?`<p>${esc(ev.nt).replace(/\n/g,'<br>')}</p>`:''}${ev.by?`<p class="meta">Người đăng: ${esc(ev.by)}</p>`:''}
   <h3 style="margin-top:12px">Đã đăng ký tham dự: ${n} người</h3><div class="rs">${rs.map(r=>`<span>${esc(r.n)}${(+r.k>1)?' (+'+(r.k-1)+')':''}</span>`).join('')||'<span class="meta" style="background:none;padding:0">Chưa có ai đăng ký.</span>'}</div>
   <p class="meta">Tên đăng ký hiển thị cho mọi người trong họ.</p>
-  <div class="row"><button class="btn" id="rg">Tôi sẽ tham dự</button>${adm()?'<button class="btn" id="ee1">Sửa sự kiện</button>':''}${(ev.seed||!canDelUid(ev.uid))?'':`<button class="btn ghost" id="dv">${/^e-gio/.test(ev.id)?'Khôi phục mặc định':'Xoá sự kiện'}</button>`}<button class="btn ghost" id="cx">Đóng</button></div>`;
+  <div class="row"><button class="btn" id="rg">Tôi sẽ tham dự</button>${adm()?'<button class="btn" id="ee1">Sửa sự kiện</button>':''}${((ev.seed&&!adm())||!canDelUid(ev.uid))?'':`<button class="btn ghost" id="dv">Xoá sự kiện</button>`}${(!ev.seed&&adm()&&/^e-gio/.test(ev.id))?'<button class="btn ghost" id="rs0">Khôi phục mặc định</button>':''}<button class="btn ghost" id="cx">Đóng</button></div>`;
   $('#ov').hidden=false;$('#cx').onclick=closeDialog;$('#rg').onclick=()=>rsvpDialog(id,occ);
   const e1=$('#ee1');if(e1)e1.onclick=()=>addEvDialog(ev);
+  const r0=$('#rs0');if(r0)r0.onclick=async()=>{closeDialog();state.localEv=state.localEv.filter(x=>x.id!==id);state.events=state.events.filter(x=>x.id!==id);if(DB){try{await DB.doc('events/'+id).delete()}catch(e){}}refresh()};
   const dv=$('#dv');if(dv)dv.onclick=()=>{$('#dlg').innerHTML=`<h2 id="dtitle">Xoá sự kiện này?</h2><p>Sự kiện sẽ biến mất với mọi người.</p><div class="row"><button class="btn" id="dy">Xoá</button><button class="btn ghost" id="dn">Không xoá</button></div>`;$('#dn').onclick=closeDialog;
-    $('#dy').onclick=async()=>{closeDialog();state.localEv=state.localEv.filter(x=>x.id!==id);state.events=state.events.filter(x=>x.id!==id);if(DB){try{await DB.doc('events/'+id).delete()}catch(e){}}refresh()}};
+    $('#dy').onclick=async()=>{closeDialog();const gio=/^e-gio/.test(id),tomb={t:ev.t,k:ev.k||'Khác',nt:'__hidden__',at:Date.now()};
+      state.localEv=state.localEv.filter(x=>x.id!==id);state.events=state.events.filter(x=>x.id!==id);
+      if(gio){if(DB){try{await DB.doc('events/'+id).set(tomb)}catch(e){state.localEv.push(Object.assign({id},tomb))}}else state.localEv.push(Object.assign({id},tomb))}
+      else if(DB){try{await DB.doc('events/'+id).delete()}catch(e){}}refresh()}};
 }
 function rsvpDialog(id,occ){if(needLogin())return;
   let name='';try{name=localStorage.getItem('gp_author')||''}catch(e){}
@@ -1649,7 +1684,7 @@ const FONT_B=['Be Vietnam Pro','Roboto','Open Sans','Noto Sans','Inter','Lexend'
 const FS_OPT=[['Nhỏ',.92],['Vừa',1],['Lớn',1.1],['Rất lớn',1.2]];
 const ALIGNS=[['','Mặc định'],['left','Canh trái'],['center','Canh giữa'],['right','Canh phải'],['justify','Canh đều hai bên']];
 function siteImg(k){return state.siteImg[k]||''}
-function normSite(c){const x=Object.assign({t:{},fonts:{},fs:1,blocks:[],theme:{},deco:{},al:{}},c||{});x.t=x.t||{};x.al=x.al||{};x.fonts=x.fonts||{};x.blocks=x.blocks||[];x.theme=x.theme||{};x.deco=x.deco||{};return x}
+function normSite(c){const x=Object.assign({t:{},fonts:{},fs:1,blocks:[],theme:{},deco:{},al:{}},c||{});x.t=x.t||{};x.al=x.al||{};x.fonts=x.fonts||{};x.blocks=x.blocks||[];x.albums=x.albums||[];x.theme=x.theme||{};x.deco=x.deco||{};return x}
 const PRESETS=[['Đỏ truyền thống','#5b1212','#8c1c1c','#ffe9a8'],['Nâu đất','#4a2c14','#7a4a1e','#f3dfb0'],['Xanh rêu','#1f4a34','#2d6a4d','#f0efb8'],['Xanh dương','#17375e','#27518a','#ffe9a8'],['Tím','#3f2257','#6b3d91','#f3e1ff']];
 function hex2rgb(h){const m=/^#?([0-9a-f]{6})$/i.exec(h||'');if(!m)return'';const n=parseInt(m[1],16);return ((n>>16)&255)+','+((n>>8)&255)+','+(n&255)}
 function mixW(h,t){const r=hex2rgb(h).split(',').map(Number);if(r.length<3)return h;return '#'+r.map(v=>Math.round(v+(255-v)*t).toString(16).padStart(2,'0')).join('')}
