@@ -1536,7 +1536,7 @@ const todayISO=()=>{const t=new Date();return isoOf(t.getDate(),t.getMonth()+1,t
 const WD=['Chủ nhật','Thứ hai','Thứ ba','Thứ tư','Thứ năm','Thứ sáu','Thứ bảy'];
 function parts(iso){const[y,m,d]=iso.split('-').map(Number);return{y,m,d,wd:new Date(y,m-1,d).getDay()}}
 function lunarOf(iso){const p=parts(iso);return solar2lunar(p.d,p.m,p.y)}
-function allEv(){return state.events.concat(state.localEv).concat(SEED_EV)}
+function allEv(){const u=state.events.concat(state.localEv),ids=new Set(u.map(x=>x.id));return u.concat(SEED_EV.filter(x=>!ids.has(x.id)))}
 function occIn(ev,y){
   if(ev.dt)return ev.dt.startsWith(y+'-')?[ev.dt]:[];
   const out=[];if(ev.ld&&ev.lm)[y-1,y,y+1].forEach(ly=>{const r=lunar2solar(ev.ld,ev.lm,ly,0);if(r&&r[2]===y)out.push(isoOf(r[0],r[1],r[2]))});
@@ -1577,7 +1577,7 @@ function evDialog(id,occ){
   ${ev.nt?`<p>${esc(ev.nt).replace(/\n/g,'<br>')}</p>`:''}${ev.by?`<p class="meta">Người đăng: ${esc(ev.by)}</p>`:''}
   <h3 style="margin-top:12px">Đã đăng ký tham dự: ${n} người</h3><div class="rs">${rs.map(r=>`<span>${esc(r.n)}${(+r.k>1)?' (+'+(r.k-1)+')':''}</span>`).join('')||'<span class="meta" style="background:none;padding:0">Chưa có ai đăng ký.</span>'}</div>
   <p class="meta">Tên đăng ký hiển thị cho mọi người trong họ.</p>
-  <div class="row"><button class="btn" id="rg">Tôi sẽ tham dự</button>${(ev.seed||!adm())?'':'<button class="btn" id="ee1">Sửa sự kiện</button>'}${(ev.seed||!canDelUid(ev.uid))?'':'<button class="btn ghost" id="dv">Xoá sự kiện</button>'}<button class="btn ghost" id="cx">Đóng</button></div>`;
+  <div class="row"><button class="btn" id="rg">Tôi sẽ tham dự</button>${adm()?'<button class="btn" id="ee1">Sửa sự kiện</button>':''}${(ev.seed||!canDelUid(ev.uid))?'':`<button class="btn ghost" id="dv">${/^e-gio/.test(ev.id)?'Khôi phục mặc định':'Xoá sự kiện'}</button>`}<button class="btn ghost" id="cx">Đóng</button></div>`;
   $('#ov').hidden=false;$('#cx').onclick=closeDialog;$('#rg').onclick=()=>rsvpDialog(id,occ);
   const e1=$('#ee1');if(e1)e1.onclick=()=>addEvDialog(ev);
   const dv=$('#dv');if(dv)dv.onclick=()=>{$('#dlg').innerHTML=`<h2 id="dtitle">Xoá sự kiện này?</h2><p>Sự kiện sẽ biến mất với mọi người.</p><div class="row"><button class="btn" id="dy">Xoá</button><button class="btn ghost" id="dn">Không xoá</button></div>`;$('#dn').onclick=closeDialog;
@@ -1625,6 +1625,10 @@ function addEvDialog(E){if(!E&&needLogin())return;
     const o={t,k:$('#ek').value,tm:$('#etm').value.trim(),pl:$('#epl').value.trim(),nt:$('#ent').value.trim(),by:$('#eby').value.trim(),at:Date.now()};
     if($('#em').value==='l'){const d=+$('#eld').value,m=+$('#elm').value;if(!(d>=1&&d<=30&&m>=1&&m<=12)){$('#ee').textContent='Ngày và tháng âm lịch chưa đúng.';return}o.ld=d;o.lm=m}
     else{const v=$('#ed').value;if(!v){$('#ee').textContent='Hãy chọn ngày.';return}o.dt=v}
+    if(E&&E.seed){const id=E.id;let warn=false;
+      if(DB){try{await DB.doc('events/'+id).set(o)}catch(e){warn=true}}
+      if(!DB||warn)state.localEv.push(Object.assign({id},o));
+      closeDialog();refresh();if(warn)alert_('Chưa lưu được lên máy chủ (cần quyền quản trị). Thay đổi chỉ có trong tab này.');return}
     if(E){const q=Object.assign({},o);delete q.at;if(o.dt){q.ld=null;q.lm=null}else q.dt=null;
       let warn=false;if(DB){try{await DB.doc('events/'+E.id).update(q)}catch(e){warn=true}}
       if(!DB||warn){const up=a=>a.map(x=>x.id===E.id?Object.assign({},x,q):x);state.localEv=up(state.localEv);state.events=up(state.events)}
